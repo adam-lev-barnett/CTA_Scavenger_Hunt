@@ -15,8 +15,45 @@
 
 ## Features
 
+### Travel Aspect
+1. Go to Places
+2. Get points
+3. See local POI
+4. Get more points
 
-## Tech Stack
+### Scoring
+- Reset every week
+- reivist place decrease  + points
+- Maybe resets back
+
+### User Profile
+- Hi-score
+- Medals
+- Stamp book
+- Username - Authemail optional
+- Friends!
+
+## UI
+- User Profile
+- Stampbook
+- Leaderboard
+- Map Image
+
+## Database
+- Spring does its magic, endpoints are built to point to table objects
+- build 2 tables to start
+    - USER
+        - uid/email
+        - pw
+    - POI
+        - id
+        - name
+        - coordinate
+        - description
+
+
+
+## Tech Stacks
 - Google API for Geo fencing
 - Hosting Pi
 - Ledger/db 
