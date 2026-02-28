@@ -1,62 +1,46 @@
 # The Loop Scanvenger Hunt
 
+this application is a scavenger hunt game based on the CTA L lines. You can visit locations for points, simmilar to pokemon go. Major locations are the train stations. Once you visit a station, you are given options to visit nearby points of interest for additional points. Users will also have a stamp book that stores the locations that you've visited previously.
 
-## Gneneral Ideas
+## Implemetation 
+### Backend
+Stack:
+postgres/sql, Java/Spring, React/typescript. We're also planning to convert some python into typescript to make it easier for people whose native language is Python
+Database/Entities/models:
+Build a postgres sql databases to store  user information and points of interest
+Points of interest have names, point values, and a list of nearby points of interest
+Train stations would be a subclass of points of interest that serve like hubs to poit you in different directions 
 
-- Scavenger hunt game similar to Pokemon Go that teaches you how to use the CTA as well
-- Each station gets you points and also once at the station you get to see what's around you
-- Maybe start with a single line
-- GPS location determines so that you are at the station (Geo-fencing)
-- Web app as MVP
-- GPS spoofing
-- GEO Fencing in the CDM building with multiple spots to demonstrate
-- host on digital ocean?
-- host on raspberri pi
+API calls:
+We're going to call from the Overpass API for our map and points of interest. We'd use Google's geofencing API to ensure that users are actually at their location and to pinpoint distance from other locations
 
-## Features
+User profile class has a hi-score, medals for achievemants, a stamp book, a username, and a friends list
 
-### Travel Aspect
-1. Go to Places
-2. Get points
-3. See local POI
-4. Get more points
+Stamp books have a list of locations attached to boolean values that determine whether or not a location has been visited
 
-### Scoring
-- Reset every week
-- reivist place decrease  + points
-- Maybe resets back
+Scores and a leader board would reset weekly, but stamp books do not reset. If you visit a locatino you've been before and try to gain points, you get fewer points than if you visit it for the first time
 
-### User Profile
-- Hi-score
-- Medals
-- Stamp book
-- Username - Authemail optional
-- Friends!
+###Frontend
+User profiles with their visible stamp book
+Leaderboard
+Image of the map as you're walking through the city along with markers for specific points of interest that you visit
+Instructions and an about page
+Contact area for issues or general contacting things
+Registration
 
-## UI
-- User Profile
-- Stampbook
-- Leaderboard
-- Map Image
+We want it to be extensible so modifications and additions will not break the rest of the code and be self contained
 
-## Database
-- Spring does its magic, endpoints are built to point to table objects
-- build 2 tables to start
-    - USER
-        - uid/email
-        - pw
-    - POI
-        - id
-        - name
-        - coordinate
-        - description
+Pretending to be your average user, Joe Smith:
+I register
+I log in
+Pick a station to go to
+Collect points from the station
+Look at a list of nearby points of interest
+Travel to one or more points of interest and collect more points
+Learn about local history/background related to the neighborhood and/or points of interest (like a tour guide)
+Look at stamp book to view where I've visited 
+See if my score reached the leaderboard
 
-
-
-## Tech Stacks
-- Google API for Geo fencing
-- Hosting Pi
-- Ledger/db 
-- Things to do can be static
-- Open street map 
+Extras:
+Following routes to different points of interest that give you "combo" points
 
