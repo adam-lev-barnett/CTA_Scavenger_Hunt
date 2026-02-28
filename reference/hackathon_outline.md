@@ -5,42 +5,41 @@ this application is a scavenger hunt game based on the CTA L lines. You can visi
 ## Implemetation 
 ### Backend
 Stack:
-postgres/sql, Java/Spring, React/typescript. We're also planning to convert some python into typescript to make it easier for people whose native language is Python
-Database/Entities/models:
-Build a postgres sql databases to store  user information and points of interest
-Points of interest have names, point values, and a list of nearby points of interest
-Train stations would be a subclass of points of interest that serve like hubs to poit you in different directions 
+postgres/sql, Java/Spring, React/typescript. We're also planning to convert some python into typescript to make it easier for people whose native language is Python.
 
-API calls:
-We're going to call from the Overpass API for our map and points of interest. We'd use Google's geofencing API to ensure that users are actually at their location and to pinpoint distance from other locations
+#### Database/Entities/models:
+Build a postgres sql databases to store  user information and points of interest.
+Points of interest have names, point values, and a list of nearby points of interest.
+Train stations would be a subclass of points of interest that serve like hubs to poit you in different directions.
 
-User profile class has a hi-score, medals for achievemants, a stamp book, a username, and a friends list
+#### API calls:
+Call from the Overpass API for our map and points of interest. Use Google's geofencing API to ensure that users are actually at their location and to pinpoint distance from other locations
 
-Stamp books have a list of locations attached to boolean values that determine whether or not a location has been visited
+#### Other Logics
+User profile class has a hi-score, medals for achievemants, a stamp book, a username, and a friends list.
 
-Scores and a leader board would reset weekly, but stamp books do not reset. If you visit a locatino you've been before and try to gain points, you get fewer points than if you visit it for the first time
+Stamp books have a list of locations attached to boolean values that determine whether or not a location has been visited.
 
-###Frontend
-User profiles with their visible stamp book
-Leaderboard
-Image of the map as you're walking through the city along with markers for specific points of interest that you visit
-Instructions and an about page
-Contact area for issues or general contacting things
-Registration
+Scores and a leader board would reset weekly, but stamp books do not reset. If you visit a locatino you've been before and try to gain points, you get fewer points than if you visit it for the first time.
 
-We want it to be extensible so modifications and additions will not break the rest of the code and be self contained
+### Frontend
+- User profiles with their visible stamp book
+- Leaderboard
+- Image of the map as you're walking through the city along with markers for specific points of interest that you visit
+- Instructions and an about page
+- Contact area for issues or general contacting things
+- Registration
 
-Pretending to be your average user, Joe Smith:
-I register
-I log in
-Pick a station to go to
-Collect points from the station
-Look at a list of nearby points of interest
-Travel to one or more points of interest and collect more points
-Learn about local history/background related to the neighborhood and/or points of interest (like a tour guide)
-Look at stamp book to view where I've visited 
-See if my score reached the leaderboard
+## Expected typical usage:
+1. register and log in
+2. Pick a station to go to
+3. Collect points from the station
+4. Look at a list of nearby points of interest
+5. Travel to one or more points of interest and collect more points
+6. Learn about local history/background related to the neighborhood and/or points of interest (like a tour guide)
+7. Look at stamp book to view where I've visited 
+8. See if my score reached the leaderboard
 
-Extras:
+## Extras
 Following routes to different points of interest that give you "combo" points
 
