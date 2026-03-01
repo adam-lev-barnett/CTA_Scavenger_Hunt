@@ -1,0 +1,278 @@
+{
+  "info": {
+    "name": "chica-go",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "poiId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "stampBookId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "entryId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "register"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Username",
+          "request": {
+            "method": "PATCH",
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}?username=newUsername",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "newUsername"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Has User Visited POI",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/visited/{{poiId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}", "visited", "{{poiId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Point of Interest",
+      "item": [
+        {
+          "name": "Check In",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": {{userId}},\n  \"poiId\": {{poiId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/poi/check-in",
+              "host": ["{{baseUrl}}"],
+              "path": ["poi", "check-in"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stamp Book",
+      "item": [
+        {
+          "name": "Get Stamp Book by User",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-books/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-books", "user", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get All Entries",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-books/{{stampBookId}}/entries",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-books", "{{stampBookId}}", "entries"]
+            }
+          }
+        },
+        {
+          "name": "Get Entry by POI",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-books/{{stampBookId}}/entries/{{poiId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-books", "{{stampBookId}}", "entries", "{{poiId}}"]
+            }
+          }
+        },
+        {
+          "name": "Add Stamp",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 0,\n  \"poiId\": {{poiId}},\n  \"stampBookId\": {{stampBookId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/stamp-books/entries",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-books", "entries"]
+            }
+          }
+        },
+        {
+          "name": "Has Entry for POI",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-books/{{stampBookId}}/entries/{{poiId}}/exists",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-books", "{{stampBookId}}", "entries", "{{poiId}}", "exists"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stamp Book Entry",
+      "item": [
+        {
+          "name": "Get Entry by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-book-entries/{{entryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-book-entries", "{{entryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get All Entries for Stamp Book",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-book-entries/stamp-book/{{stampBookId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-book-entries", "stamp-book", "{{stampBookId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Visited Entries",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-book-entries/stamp-book/{{stampBookId}}/visited",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-book-entries", "stamp-book", "{{stampBookId}}", "visited"]
+            }
+          }
+        },
+        {
+          "name": "Get Entry by Stamp Book and POI",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-book-entries/stamp-book/{{stampBookId}}/poi/{{poiId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-book-entries", "stamp-book", "{{stampBookId}}", "poi", "{{poiId}}"]
+            }
+          }
+        },
+        {
+          "name": "Has Visited POI",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-book-entries/stamp-book/{{stampBookId}}/poi/{{poiId}}/visited",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-book-entries", "stamp-book", "{{stampBookId}}", "poi", "{{poiId}}", "visited"]
+            }
+          }
+        },
+        {
+          "name": "Count Entries",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-book-entries/stamp-book/{{stampBookId}}/count",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-book-entries", "stamp-book", "{{stampBookId}}", "count"]
+            }
+          }
+        },
+        {
+          "name": "Delete Entry",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/stamp-book-entries/{{entryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["stamp-book-entries", "{{entryId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
