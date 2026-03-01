@@ -43,12 +43,7 @@ public class Profile {
     @Getter private StampBook stampBook;
 
     @Transient
-    Boolean visitedPoi(PointOfInterest pointOfInterest) {
-        return this.stampBook.getEntries().contains(pointOfInterest);
-    }
-
-    @Transient
-    void addPoints(int points) {
+    public void addPoints(int points) {
         weeklyScore += points;
     }
 

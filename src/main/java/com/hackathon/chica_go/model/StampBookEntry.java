@@ -39,9 +39,9 @@ public class StampBookEntry {
 
     @Column(name = "visited", nullable = false)
     @Builder.Default
-    private boolean visited = false;
+    @Getter private boolean visited = false;
 
     // NULL until the user checks in — matches schema intent
     @Column(name = "visited_at")
-    private LocalDateTime visitedAt;
+    @Setter @Getter private LocalDateTime visitedAt;
 }

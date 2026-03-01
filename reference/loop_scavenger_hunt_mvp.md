@@ -1,4 +1,4 @@
-# The Loop Scavenger Hunt — MVP Task Breakdown
+ # The Loop Scavenger Hunt — MVP Task Breakdown
 > Target Completion Window: 12–18 Hours
 
 ---

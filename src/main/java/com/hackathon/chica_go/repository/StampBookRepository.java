@@ -13,4 +13,6 @@ public interface StampBookRepository extends JpaRepository<StampBook, Long> {
     Optional<StampBook> findByUserId(Long userId);
 
     boolean existsByUserId(Long userId);
+
+    boolean existsByStampBookIdAndPointOfInterestId(Long stampBookId, Long poiId);
 }
