@@ -60,14 +60,12 @@ public class PointOfInterest {
 
         profile.addPoints(pointsEarned);
 
-        scoreCalculator.applyPointsToProfile(user, pointsEarned);
+        scoreCalculator.applyPointsToProfile(profile, pointsEarned);
 
         entry.setVisited(true);
         entry.setVisitedAt(LocalDateTime.now());
 
         return new CheckIn.CheckInResult(pointsEarned, user.getWeeklyScore(), isFirstVisit);
     }
-
-
 
 }
