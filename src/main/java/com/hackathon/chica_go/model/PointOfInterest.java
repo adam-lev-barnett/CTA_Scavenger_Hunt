@@ -39,32 +39,5 @@ public class PointOfInterest {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<StampBookEntry> stampBookEntries;
-     */
-
-    @Transient
-    private CheckIn checkIn;
-
-    @Transient
-    private final ScoreCalculator scoreCalculator = new ScoreCalculator();
-
-    @Transient
-    private ProfileRepository profileRepository;
-
-    public CheckIn.CheckInResult checkInProfile(Profile profile) {
-        if (profile == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "profile is null");
-
-        boolean isFirstVisit = profile.visitedPoi(this);
-
-        int pointsEarned = scoreCalculator.calculatePoints(points, isFirstVisit);
-
-        profile.addPoints(pointsEarned);
-
-        scoreCalculator.applyPointsToProfile(profile, pointsEarned);
-
-        entry.setVisited(true);
-        entry.setVisitedAt(LocalDateTime.now());
-
-        return new CheckIn.CheckInResult(pointsEarned, user.getWeeklyScore(), isFirstVisit);
-    }
 
 }
