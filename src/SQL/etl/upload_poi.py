@@ -21,21 +21,18 @@ cursor = conn.cursor()
 # Enable FK enforcement for this session — required every connection in SQLite
 cursor.execute("PRAGMA foreign_keys = ON")
 
-# -------------------------------------------------------
-# SEED: point_of_interests — STATIONS
-#
-# SELF-REFERENCING INSERT PATTERN (required for station rows):
-#   Stations identify themselves by having station_id == their own id.
-#   Since the id is auto-assigned, we cannot know it before insert.
-#   Step 1: INSERT with station_id = NULL (placeholder)
-#   Step 2: UPDATE SET station_id = id once the id is known
-#
-# DO NOT attempt to set station_id on the initial INSERT for stations —
-# the id doesn't exist yet and the FK would reject it.
-# -------------------------------------------------------
+# reset table to prevent duplicates
+cursor.execute("DELETE FROM point_of_interests;")
+print("Table truncated")
+
+
+
+
 
 stations_raw, pois_raw = Parser.build_poi_list("poi.geojson", "stations.geojson")
 
+print("Num stations: ", len(stations_raw))
+print("Num pois: ", len(pois_raw))
 
 station_map = {}  # maps station_name → assigned id, used when seeding POIs below
 
@@ -70,11 +67,11 @@ print(f"Inserted {len(stations_raw)} stations")
 # -------------------------------------------------------
 
 for _poi in pois_raw:
-    poi_name = _station['name']
-    longitude = _station['longitude']
-    latitude = _station['latitude']
-    station_lookup = _station['nearest_station']
-    points = _station['points']
+    poi_name = _poi['name']
+    longitude = _poi['longitude']
+    latitude = _poi['latitude']
+    station_lookup = _poi['nearest_station']
+    points = _poi['points']
     station_id = station_map.get(station_lookup) if station_lookup else None
     cursor.execute(
         "INSERT INTO point_of_interests (poi_name, longitude, latitude, station_id, points) VALUES (?, ?, ?, ?, ?)",
