@@ -21,21 +21,21 @@ public class StampBookEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Getter private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stamp_book_id", nullable = false,
                 foreignKey = @ForeignKey(name = "fk_entries_stamp_book"))
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private StampBook stampBook;
+    @Getter private StampBook stampBook;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", nullable = false,
                 foreignKey = @ForeignKey(name = "fk_entries_location"))
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private PointOfInterest pointOfInterest;
+    @Getter private PointOfInterest pointOfInterest;
 
     @Column(name = "visited", nullable = false)
     @Builder.Default
