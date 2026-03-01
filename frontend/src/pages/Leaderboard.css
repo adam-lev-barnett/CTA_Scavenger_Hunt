@@ -99,7 +99,8 @@
   height: 80px;
   font-size: 2rem;
   border-color: #ffd700;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.5), 0 0 48px rgba(255, 215, 0, 0.2);
+  animation: neonPulse 2.5s ease-in-out infinite;
 }
 
 .place-2 .podium-avatar {
@@ -159,10 +160,11 @@
 
 /* Leaderboard Table */
 .leaderboard-table {
-  background: var(--surface);
+  background: linear-gradient(145deg, rgba(15, 52, 96, 0.98) 0%, rgba(10, 35, 70, 0.95) 100%);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid var(--surface-light);
+  border: 1px solid rgba(0, 161, 222, 0.2);
+  box-shadow: var(--shadow-lg);
 }
 
 .table-header {
@@ -195,8 +197,9 @@
 }
 
 .table-row.current-user {
-  background: rgba(0, 161, 222, 0.1);
+  background: rgba(0, 161, 222, 0.12);
   border-left: 3px solid var(--primary);
+  box-shadow: inset 0 0 20px rgba(0, 161, 222, 0.08);
 }
 
 .col-rank {

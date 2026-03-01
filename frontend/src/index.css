@@ -50,6 +50,14 @@
   --transition-fast: 150ms ease;
   --transition-normal: 300ms ease;
   --transition-slow: 500ms ease;
+
+  /* Chicago Aesthetics */
+  --chicago-grid: rgba(0, 161, 222, 0.035);
+  --neon-glow-primary: 0 0 15px rgba(0, 161, 222, 0.5), 0 0 40px rgba(0, 161, 222, 0.2);
+  --neon-glow-red: 0 0 15px rgba(198, 12, 48, 0.5), 0 0 40px rgba(198, 12, 48, 0.2);
+  --neon-glow-green: 0 0 15px rgba(0, 155, 58, 0.5), 0 0 40px rgba(0, 155, 58, 0.2);
+  --card-border: rgba(0, 161, 222, 0.18);
+  --steel-surface: linear-gradient(145deg, rgba(15, 52, 96, 0.98) 0%, rgba(10, 35, 70, 0.95) 100%);
 }
 
 /* Reset & Base Styles */
@@ -69,7 +77,11 @@ html {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  background: linear-gradient(135deg, var(--background) 0%, var(--background-light) 100%);
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 79px, var(--chicago-grid) 79px, var(--chicago-grid) 80px),
+    repeating-linear-gradient(90deg, transparent, transparent 79px, var(--chicago-grid) 79px, var(--chicago-grid) 80px),
+    linear-gradient(160deg, #0a0e1a 0%, #1a1a2e 40%, #16213e 70%, #0d2d55 100%);
+  background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;
@@ -100,10 +112,13 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
   font-size: 2.5rem;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--cta-purple) 100%);
+  font-weight: 800;
+  background: linear-gradient(270deg, var(--primary), #6dd5ed, var(--cta-purple), var(--cta-red), var(--primary));
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: shimmer 7s ease-in-out infinite;
 }
 
 h2 {
@@ -146,7 +161,7 @@ p {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), var(--neon-glow-primary);
 }
 
 .btn-secondary {
@@ -163,11 +178,23 @@ p {
 .btn-danger {
   background: linear-gradient(135deg, var(--cta-red) 0%, #9e0a26 100%);
   color: white;
+  transition: all var(--transition-fast);
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), var(--neon-glow-red);
 }
 
 .btn-success {
   background: linear-gradient(135deg, var(--cta-green) 0%, #007a2e 100%);
   color: white;
+  transition: all var(--transition-fast);
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), var(--neon-glow-green);
 }
 
 .btn-lg {
@@ -219,11 +246,11 @@ p {
 
 /* Cards */
 .card {
-  background: var(--surface);
+  background: var(--steel-surface);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--surface-light);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
 }
 
 .card-header {
@@ -349,6 +376,38 @@ p {
   0% { transform: scale(0.5); opacity: 0; }
   50% { transform: scale(1.2); }
   100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes neonPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+
+@keyframes cityGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes trainShine {
+  0% { left: -100%; }
+  100% { left: 250%; }
+}
+
+@keyframes lineScroll {
+  0% { background-position: 0% 0%; }
+  100% { background-position: -200% 0%; }
+}
+
+@keyframes logoShimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .animate-fade-in {

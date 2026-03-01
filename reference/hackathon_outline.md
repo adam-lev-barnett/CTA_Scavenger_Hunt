@@ -5,10 +5,10 @@ this application is a scavenger hunt game based on the CTA L lines. You can visi
 ## Implemetation 
 ### Backend
 Stack:
-postgres/sql, Java/Spring, React/typescript. We're also planning to convert some python into typescript to make it easier for people whose native language is Python.
+sqlite, Java/Spring, React/typescript. We're also planning to convert some python into typescript to make it easier for people whose native language is Python.
 
 #### Database/Entities/models:
-Build a postgres sql databases to store  user information and points of interest.
+Build a sqlite databases to store  user information and points of interest.
 Points of interest have names, point values, and a list of nearby points of interest.
 Train stations would be a subclass of points of interest that serve like hubs to poit you in different directions.
 
