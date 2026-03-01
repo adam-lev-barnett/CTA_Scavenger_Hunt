@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 import Parser
 
 # establish database connection
-DB_PATH = os.path.join(os.path.dirname(__file__), "..", "chica_go.db")
+DB_PATH = os.path.join("/Users/yung/repos/CTA_Scavenger_Hunt/chica_go.db")
 conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
