@@ -94,7 +94,6 @@ logs/
 *~
 
 ### Database ###
-*.db
 *.sqlite
 *.sqlite3
 
@@ -114,5 +113,10 @@ api-keys.properties
 api-keys/
 src/api-keys/
 
-
-
+### Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
