@@ -100,4 +100,19 @@ logs/
 
 ### Application specific ###
 application-local.properties
+application-dev.properties
+application-prod.properties
+
+### API Keys & Secrets ###
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets.properties
+api-keys.properties
+api-keys/
+src/api-keys/
+
+
 
