@@ -21,7 +21,7 @@ public class CheckIn {
      */
     public CheckInResult process(Profile user, PointOfInterest location, StampBookEntry entry) {
         boolean isFirstVisit = !entry.isVisited();
-        int pointsEarned = scoreCalculator.calculatePoints(location, isFirstVisit);
+        int pointsEarned = scoreCalculator.calculatePoints(location.getPoints(), isFirstVisit);
 
         scoreCalculator.applyPointsToProfile(user, pointsEarned);
 

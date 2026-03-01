@@ -15,8 +15,16 @@ public interface PointOfInterestRepository extends JpaRepository<PointOfInterest
     // All POIs linked to a specific station
     List<PointOfInterest> findByStationId(Long stationId);
 
+       // Rows that represent stations (station_id == id)
+       @Query("SELECT p FROM PointOfInterest p WHERE p.stationId = p.id")
+       List<PointOfInterest> findStations();
+
+       // Nearby POIs for a station (exclude the station row itself)
+       @Query("SELECT p FROM PointOfInterest p WHERE p.stationId = :stationId AND p.id <> :stationId")
+       List<PointOfInterest> findNearbyPoisByStationId(@Param("stationId") Long stationId);
+
     // Standalone POIs — not tied to any station
-    List<PointOfInterest> findByStationIsNull();
+       List<PointOfInterest> findByStationIdIsNull();
 
     List<PointOfInterest> findByPoiNameContainingIgnoreCase(String name);
 

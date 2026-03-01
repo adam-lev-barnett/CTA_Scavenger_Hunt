@@ -44,7 +44,20 @@ public class Profile {
 
     @Transient
     Boolean visitedPoi(PointOfInterest pointOfInterest) {
-        return this.stampBook.getEntries().contains(pointOfInterest);
+        if (this.stampBook == null || this.stampBook.getEntries() == null || pointOfInterest == null) {
+            return false;
+        }
+
+        Long poiId = pointOfInterest.getId();
+        if (poiId == null) {
+            return false;
+        }
+
+        return this.stampBook.getEntries().stream()
+                .anyMatch(entry ->
+                        entry.getPointOfInterest() != null
+                                && poiId.equals(entry.getPointOfInterest().getId())
+                                && entry.isVisited());
     }
 
     @Transient

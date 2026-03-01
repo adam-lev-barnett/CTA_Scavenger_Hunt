@@ -1,8 +1,8 @@
 package com.hackathon.chica_go.controller;
 
 import com.hackathon.chica_go.dto.OverpassStationDTO;
-import com.hackathon.chica_go.model.Station;
-import com.hackathon.chica_go.repository.StationRepository;
+import com.hackathon.chica_go.model.PointOfInterest;
+import com.hackathon.chica_go.repository.PointOfInterestRepository;
 import com.hackathon.chica_go.service.ApiKeyService;
 import com.hackathon.chica_go.service.GeofencingService;
 import com.hackathon.chica_go.service.OverpassApiService;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class TestApiController {
 
     private final OverpassApiService overpassApiService;
-    private final StationRepository stationRepository;
+    private final PointOfInterestRepository pointOfInterestRepository;
     private final GeofencingService geofencingService;
     private final ApiKeyService apiKeyService;
 
@@ -57,9 +57,23 @@ public class TestApiController {
      * Get all stations from the database
      */
     @GetMapping("/stations")
-    public ResponseEntity<List<Station>> getAllStations() {
-        List<Station> stations = stationRepository.findAll();
+    public ResponseEntity<List<Map<String, Object>>> getAllStations() {
+        List<Map<String, Object>> stations = pointOfInterestRepository.findStations().stream()
+                .map(this::toStationResponse)
+                .toList();
         return ResponseEntity.ok(stations);
+    }
+
+    private Map<String, Object> toStationResponse(PointOfInterest poi) {
+        return Map.of(
+                "id", poi.getId(),
+                "stationName", poi.getPoiName(),
+                "poiName", poi.getPoiName(),
+                "latitude", poi.getLatitude(),
+                "longitude", poi.getLongitude(),
+                "stationId", poi.getStationId(),
+                "points", poi.getPoints()
+        );
     }
 
     /**

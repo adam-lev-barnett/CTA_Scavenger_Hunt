@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface StampBookRepository extends JpaRepository<StampBook, Long> {
 
     // Primary lookup — every service call starts with a user ID
-    Optional<StampBook> findByUserId(Long userId);
+    Optional<StampBook> findByProfileId(Long profileId);
 
-    boolean existsByUserId(Long userId);
+    boolean existsByProfileId(Long profileId);
 }
