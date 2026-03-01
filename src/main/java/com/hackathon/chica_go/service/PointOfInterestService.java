@@ -33,7 +33,7 @@ public class PointOfInterestService {
     Also adds points to the profile based on whether or not they've visited before
     Returns a DTO of the success response
     */
-    public CheckIn.CheckInResult checkInProfile(long userId, Long poiId) {
+    public CheckInResult checkInProfile(long userId, Long poiId) {
 
         PointOfInterest poi = pointOfInterestRepository.findById(poiId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -57,7 +57,7 @@ public class PointOfInterestService {
 
         addedEntry.setVisitedAt(LocalDateTime.now());
 
-        return new CheckIn.CheckInResult(pointsEarned, foundProfile.getWeeklyScore(), isFirstVisit);
+        return new CheckInResult(pointsEarned, foundProfile.getWeeklyScore(), isFirstVisit);
     }
 
 }

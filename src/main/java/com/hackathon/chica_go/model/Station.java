@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Station extends PointOfInterest{
     HashSet<PointOfInterest> pointsOfInterest;
-    private CheckIn checkIn;
 
     // Figure out how to automatically pull data/update from the database
 
