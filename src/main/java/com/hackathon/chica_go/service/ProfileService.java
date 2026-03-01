@@ -6,8 +6,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.Transient;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -29,6 +31,27 @@ public class ProfileService {
     public Profile getProfile(Long userId) {
         return profileRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found: " + userId));
+    }
+
+    /**
+     * Authenticates a user by email and password.
+     * Maps to POST /auth/login
+     */
+    public Profile authenticateUser(String email, String password) {
+        Profile profile = profileRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "Invalid email or password"
+                ));
+
+        if (!passwordEncoder.matches(password, profile.getPasswordHash())) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Invalid email or password"
+            );
+        }
+
+        return profile;
     }
 
 

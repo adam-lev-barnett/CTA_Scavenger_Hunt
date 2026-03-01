@@ -2,19 +2,23 @@ package com.hackathon.chica_go.controller;
 
 import com.hackathon.chica_go.dto.RegisterRequest;
 import com.hackathon.chica_go.model.Profile;
+import com.hackathon.chica_go.model.StampBookEntry;
 import com.hackathon.chica_go.service.ProfileService;
+import com.hackathon.chica_go.service.StampBookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final StampBookService stampBookService;
 
     /**
      * POST /users/register
@@ -51,5 +55,16 @@ public class ProfileController {
             @PathVariable Long userId,
             @PathVariable Long poiId) {
         return ResponseEntity.ok(profileService.visitedPoi(userId, poiId));
+    }
+
+    /**
+     * GET /users/{userId}/stampbook
+     * Get user's stampbook entries
+     */
+    @GetMapping("/{userId}/stampbook")
+    public ResponseEntity<List<StampBookEntry>> getStampBook(@PathVariable Long userId) {
+        return ResponseEntity.ok(stampBookService.getAllEntries(
+                stampBookService.getStampBook(userId).getId()
+        ));
     }
 }

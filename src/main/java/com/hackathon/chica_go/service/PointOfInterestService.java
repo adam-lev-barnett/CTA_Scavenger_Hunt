@@ -58,6 +58,13 @@ public class PointOfInterestService {
         pointOfInterestRepository.deleteById(id);
     }
 
+    public List<PointOfInterest> getNearbyPois(Long stationId) {
+        return pointOfInterestRepository.findByStationId(stationId)
+                .stream()
+                .filter(poi -> !poi.getId().equals(stationId)) // Exclude the station itself
+                .toList();
+    }
+
     /*
     Gets the associated point of interest if it exists, the profile that's checking in, and the profile's stamp book
     Checks if the profile has been there before, and adds a stamp if it has.

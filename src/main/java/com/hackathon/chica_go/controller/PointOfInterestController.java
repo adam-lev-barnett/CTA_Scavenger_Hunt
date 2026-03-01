@@ -49,6 +49,12 @@ public class PointOfInterestController {
         return ResponseEntity.noContent().build();
     }
 
+    /** GET /point-of-interest/station/{stationId} - Get POIs near a station */
+    @GetMapping(value = "/{stationId}/nearby", produces = "application/json")
+    public ResponseEntity<List<PointOfInterest>> getNearbypointOfInterests(@PathVariable Long stationId) {
+        return ResponseEntity.ok(pointOfInterestService.getNearbyPois(stationId));
+    }
+
     /** POST /poi/check-in */
     @PostMapping("/check-in")
     public ResponseEntity<CheckInResultDTO> checkInProfile(@RequestBody CheckInRequest checkInRequest) {
