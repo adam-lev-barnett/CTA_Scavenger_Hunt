@@ -457,7 +457,7 @@ export default function MapPage() {
                   </div>
                   <div className="row-actions">
                     <button
-                      disabled={loadingLocationId !== null || !isAtStation(station) || isVisited(station.id)}
+                      disabled={loadingLocationId !== null || !isAtStation(station)}
                       onClick={() => handleStationCheckIn(station)}
                     >
                       {loadingLocationId === station.id
