@@ -10,9 +10,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+// AI generated
+
 /**
  * Configuration for loading API keys from files
  */
+
 @Configuration
 @Slf4j
 public class ApiKeyConfiguration {
