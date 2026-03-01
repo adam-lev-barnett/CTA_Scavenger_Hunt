@@ -31,7 +31,7 @@ public class StampBookService {
      * Fetches the StampBook belonging to the given user.
      */
     public StampBook getStampBook(Long userId) {
-        return stampBookRepository.findByUserId(userId)
+        return stampBookRepository.findByProfileId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("StampBook not found for user: " + userId));
     }
 

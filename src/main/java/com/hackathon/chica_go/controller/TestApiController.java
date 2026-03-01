@@ -1,8 +1,8 @@
 package com.hackathon.chica_go.controller;
 
 import com.hackathon.chica_go.dto.OverpassStationDTO;
-import com.hackathon.chica_go.model.Station;
-import com.hackathon.chica_go.repository.StationRepository;
+import com.hackathon.chica_go.model.PointOfInterest;
+import com.hackathon.chica_go.repository.PointOfInterestRepository;
 import com.hackathon.chica_go.service.ApiKeyService;
 import com.hackathon.chica_go.service.GeofencingService;
 import com.hackathon.chica_go.service.OverpassApiService;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class TestApiController {
 
     private final OverpassApiService overpassApiService;
-    private final StationRepository stationRepository;
+    private final PointOfInterestRepository poiRepository;
     private final GeofencingService geofencingService;
     private final ApiKeyService apiKeyService;
 
@@ -54,12 +54,11 @@ public class TestApiController {
     }
 
     /**
-     * Get all stations from the database
+     * Get all stations from the database (POIs where stationId == id)
      */
     @GetMapping("/stations")
-    public ResponseEntity<List<Station>> getAllStations() {
-        List<Station> stations = stationRepository.findAll();
-        return ResponseEntity.ok(stations);
+    public ResponseEntity<List<PointOfInterest>> getAllStations() {
+        return ResponseEntity.ok(poiRepository.findAllStations());
     }
 
     /**
@@ -97,7 +96,3 @@ public class TestApiController {
         ));
     }
 }
-
-
-
-

@@ -1,10 +1,10 @@
 package com.hackathon.chica_go.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,6 +17,11 @@ import java.nio.file.Paths;
 @Configuration
 @Slf4j
 public class ApiKeyConfiguration {
+
+    @Bean
+    public WebClient.Builder webClientBuilder() {
+        return WebClient.builder();
+    }
 
     /**
      * Load Google Maps API key from src/api-keys/google-maps file

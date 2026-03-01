@@ -21,10 +21,10 @@ public class Profile {
     @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true, length = 255)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password_hash", nullable = false, length = 255)
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @Column(name = "hi_score", nullable = false)
@@ -46,11 +46,5 @@ public class Profile {
     public void addPoints(int points) {
         weeklyScore += points;
     }
-
-    @Transient
-    void resetPoints() {
-        weeklyScore = 0;
-    }
-
 
 }
