@@ -1,4 +1,6 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { api } from '../services/api';
+import { DEMO_TOKEN, DEMO_USER_ID } from '../services/demoData';
 
 interface AuthState {
   token: string | null;
@@ -6,6 +8,7 @@ interface AuthState {
 }
 
 interface AuthContextValue extends AuthState {
+  isInitializing: boolean;
   login: (token: string, userId?: number) => void;
   logout: () => void;
 }
@@ -33,10 +36,62 @@ function loadInitialState(): AuthState {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>(() => loadInitialState());
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function initializeSession() {
+      if (!state.token) {
+        setIsInitializing(false);
+        return;
+      }
+
+      if (state.token === DEMO_TOKEN) {
+        if (state.userId == null) {
+          const nextState = { token: DEMO_TOKEN, userId: DEMO_USER_ID };
+          setState(nextState);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+        }
+        setIsInitializing(false);
+        return;
+      }
+
+      try {
+        const me = await api.getMe(state.token);
+        if (cancelled) {
+          return;
+        }
+
+        const nextState = { token: state.token, userId: me.id };
+        setState(nextState);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+      } catch {
+        if (cancelled) {
+          return;
+        }
+
+        const nextState = { token: null, userId: null };
+        setState(nextState);
+        localStorage.removeItem(STORAGE_KEY);
+      } finally {
+        if (!cancelled) {
+          setIsInitializing(false);
+        }
+      }
+    }
+
+    void initializeSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const value = useMemo<AuthContextValue>(
     () => ({
       ...state,
+      isInitializing,
       login: (token: string, userId?: number) => {
         const nextState = { token, userId: userId ?? null };
         setState(nextState);
@@ -48,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem(STORAGE_KEY);
       },
     }),
-    [state]
+    [isInitializing, state]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

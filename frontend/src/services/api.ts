@@ -54,6 +54,14 @@ async function request<T>(
 }
 
 export const api = {
+  async getMe(token: string): Promise<Profile> {
+    if (isDemoToken(token)) {
+      return getDemoProfile();
+    }
+
+    return request<Profile>('/auth/me', 'GET', undefined, token);
+  },
+
   async login(email: string, password: string): Promise<AuthResponse> {
     return request<AuthResponse>('/auth/login', 'POST', { email, password });
   },

@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Seeds the database with CTA station data on application startup
@@ -20,10 +22,11 @@ import java.util.List;
 @Slf4j
 public class StationDataSeeder implements CommandLineRunner {
 
-        private final PointOfInterestRepository pointOfInterestRepository;
+    private final PointOfInterestRepository pointOfInterestRepository;
     private final OverpassApiService overpassApiService;
 
     @Override
+    @Transactional
     public void run(String... args) {
         log.info("Checking if station data needs to be seeded...");
 
@@ -64,9 +67,8 @@ public class StationDataSeeder implements CommandLineRunner {
                             .build())
                     .toList();
 
-            pointOfInterestRepository.saveAll(stations);
-            stations.forEach(station -> station.setStationId(station.getId()));
-            pointOfInterestRepository.saveAll(stations);
+            persistStations(stations);
+
             log.info("Successfully seeded {} CTA stations", stations.size());
 
         } catch (Exception e) {
@@ -95,10 +97,21 @@ public class StationDataSeeder implements CommandLineRunner {
                 buildStation("Chicago (Red Line)", BigDecimal.valueOf(41.89681), BigDecimal.valueOf(-87.62808))
         );
 
-        pointOfInterestRepository.saveAll(fallbackStations);
-        fallbackStations.forEach(station -> station.setStationId(station.getId()));
-        pointOfInterestRepository.saveAll(fallbackStations);
+        persistStations(fallbackStations);
         log.info("Successfully seeded {} fallback CTA stations", fallbackStations.size());
+    }
+
+    private void persistStations(List<PointOfInterest> stations) {
+        pointOfInterestRepository.saveAll(stations);
+
+        List<Long> ids = stations.stream()
+                .map(PointOfInterest::getId)
+                .filter(Objects::nonNull)
+                .toList();
+
+        if (!ids.isEmpty()) {
+            pointOfInterestRepository.markAsStations(ids);
+        }
     }
 
     private PointOfInterest buildStation(String name, BigDecimal latitude, BigDecimal longitude) {

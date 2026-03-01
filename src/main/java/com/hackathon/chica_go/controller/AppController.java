@@ -10,10 +10,13 @@ import com.hackathon.chica_go.repository.ProfileRepository;
 import com.hackathon.chica_go.repository.StampBookEntryRepository;
 import com.hackathon.chica_go.repository.StampBookRepository;
 import com.hackathon.chica_go.service.GeofencingService;
+import com.hackathon.chica_go.service.JwtService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,7 +24,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ public class AppController {
     private final StampBookEntryRepository stampBookEntryRepository;
     private final GeofencingService geofencingService;
     private final PasswordEncoder passwordEncoder;
+        private final JwtService jwtService;
 
     private final ScoreCalculator scoreCalculator = new ScoreCalculator();
 
@@ -63,7 +66,7 @@ public class AppController {
         Profile saved = profileRepository.save(profile);
         ensureStampBookSeeded(saved);
 
-        return ResponseEntity.ok(new AuthResponse(UUID.randomUUID().toString(), saved.getId(), saved.getUsername()));
+        return ResponseEntity.ok(new AuthResponse(jwtService.generateToken(saved), saved.getId(), saved.getUsername()));
     }
 
     @PostMapping("/auth/login")
@@ -79,8 +82,24 @@ public class AppController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
 
-        return ResponseEntity.ok(new AuthResponse(UUID.randomUUID().toString(), profile.getId(), profile.getUsername()));
+        return ResponseEntity.ok(new AuthResponse(jwtService.generateToken(profile), profile.getId(), profile.getUsername()));
     }
+
+        @GetMapping("/auth/me")
+        public ResponseEntity<MeResponse> me() {
+                Long authenticatedUserId = getAuthenticatedUserId();
+
+                Profile profile = profileRepository.findById(authenticatedUserId)
+                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+                return ResponseEntity.ok(new MeResponse(
+                                profile.getId(),
+                                profile.getUsername(),
+                                profile.getEmail(),
+                                profile.getHiScore(),
+                                profile.getWeeklyScore()
+                ));
+        }
 
     @PostMapping("/checkin")
     public ResponseEntity<CheckInResponse> checkIn(@RequestBody CheckInRequest request) {
@@ -88,6 +107,11 @@ public class AppController {
                 || request.userLat() == null || request.userLng() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "userId, locationId, userLat, and userLng are required");
         }
+
+                Long authenticatedUserId = getAuthenticatedUserId();
+                if (!authenticatedUserId.equals(request.userId())) {
+                        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Token user does not match request userId");
+                }
 
         Profile profile = profileRepository.findById(request.userId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
@@ -190,6 +214,11 @@ public class AppController {
 
     @PatchMapping("/users/{userId}")
     public ResponseEntity<ProfileResponse> updateUser(@PathVariable Long userId, @RequestBody UpdateUserRequest request) {
+                Long authenticatedUserId = getAuthenticatedUserId();
+                if (!authenticatedUserId.equals(userId)) {
+                        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only update your own profile");
+                }
+
         if (request.username() == null || request.username().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username is required");
         }
@@ -240,14 +269,36 @@ public class AppController {
         return new PoiResponse(
                 poi.getId(),
                 poi.getPoiName(),
-                poi.getPoiName(),
-                poi.getPoiName(),
+                null,
+                null,
                 poi.getLatitude(),
                 poi.getLongitude(),
                 poi.getStationId(),
                 poi.getPoints()
         );
     }
+
+        private Long getAuthenticatedUserId() {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                if (authentication == null || authentication.getPrincipal() == null) {
+                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing authentication");
+                }
+
+                Object principal = authentication.getPrincipal();
+                if (principal instanceof Long userId) {
+                        return userId;
+                }
+
+                if (principal instanceof String userIdString) {
+                        try {
+                                return Long.parseLong(userIdString);
+                        } catch (NumberFormatException e) {
+                                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authentication principal");
+                        }
+                }
+
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authentication principal");
+        }
 
     private record RegisterRequest(String username, String email, String password) {
     }
@@ -257,6 +308,9 @@ public class AppController {
 
     private record AuthResponse(String token, Long userId, String username) {
     }
+
+        private record MeResponse(Long id, String username, String email, int hiScore, int weeklyScore) {
+        }
 
     private record CheckInRequest(Long userId, Long locationId, BigDecimal userLat, BigDecimal userLng) {
     }

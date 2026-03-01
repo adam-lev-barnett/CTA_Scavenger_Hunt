@@ -68,7 +68,7 @@ public class TestApiController {
         return Map.of(
                 "id", poi.getId(),
                 "stationName", poi.getPoiName(),
-                "poiName", poi.getPoiName(),
+
                 "latitude", poi.getLatitude(),
                 "longitude", poi.getLongitude(),
                 "stationId", poi.getStationId(),
