@@ -1,0 +1,234 @@
+.points-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-lg);
+}
+
+.points-modal {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 60px rgba(0, 161, 222, 0.3);
+}
+
+@keyframes modalAppear {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-points {
+  animation: modalAppear 0.5s ease-out;
+}
+
+.modal-close {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  width: 32px;
+  height: 32px;
+  background: var(--surface-light);
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: var(--cta-red);
+  color: white;
+}
+
+.points-celebration {
+  text-align: center;
+  position: relative;
+}
+
+/* Confetti */
+.confetti {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: confettiFall 2s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(200px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti-piece:nth-child(1) { left: 10%; background: var(--cta-red); animation-delay: 0s; }
+.confetti-piece:nth-child(2) { left: 20%; background: var(--cta-blue); animation-delay: 0.1s; }
+.confetti-piece:nth-child(3) { left: 30%; background: var(--cta-green); animation-delay: 0.2s; }
+.confetti-piece:nth-child(4) { left: 40%; background: var(--cta-orange); animation-delay: 0.15s; }
+.confetti-piece:nth-child(5) { left: 50%; background: var(--cta-purple); animation-delay: 0.25s; }
+.confetti-piece:nth-child(6) { left: 60%; background: var(--cta-pink); animation-delay: 0.05s; }
+.confetti-piece:nth-child(7) { left: 70%; background: var(--cta-yellow); animation-delay: 0.3s; }
+.confetti-piece:nth-child(8) { left: 80%; background: var(--cta-brown); animation-delay: 0.12s; }
+.confetti-piece:nth-child(9) { left: 90%; background: var(--cta-red); animation-delay: 0.22s; }
+.confetti-piece:nth-child(10) { left: 15%; background: var(--cta-blue); animation-delay: 0.08s; }
+.confetti-piece:nth-child(11) { left: 25%; background: var(--cta-green); animation-delay: 0.18s; }
+.confetti-piece:nth-child(12) { left: 35%; background: var(--cta-orange); animation-delay: 0.28s; }
+.confetti-piece:nth-child(13) { left: 45%; background: var(--cta-purple); animation-delay: 0.03s; }
+.confetti-piece:nth-child(14) { left: 55%; background: var(--cta-pink); animation-delay: 0.13s; }
+.confetti-piece:nth-child(15) { left: 65%; background: var(--cta-yellow); animation-delay: 0.23s; }
+.confetti-piece:nth-child(16) { left: 75%; background: var(--cta-brown); animation-delay: 0.06s; }
+.confetti-piece:nth-child(17) { left: 85%; background: var(--cta-red); animation-delay: 0.16s; }
+.confetti-piece:nth-child(18) { left: 5%; background: var(--cta-blue); animation-delay: 0.26s; }
+.confetti-piece:nth-child(19) { left: 95%; background: var(--cta-green); animation-delay: 0.09s; }
+.confetti-piece:nth-child(20) { left: 50%; background: var(--cta-orange); animation-delay: 0.19s; }
+
+.points-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-md);
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.points-title {
+  font-size: 1.75rem;
+  margin-bottom: var(--spacing-lg);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--cta-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.points-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-lg);
+}
+
+.points-plus {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.points-number {
+  font-size: 4rem;
+  font-weight: 900;
+  color: var(--success);
+  text-shadow: 0 0 20px rgba(0, 155, 58, 0.5);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.points-label {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.location-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--surface-light);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--spacing-lg);
+}
+
+.location-icon {
+  font-size: 1.25rem;
+}
+
+.location-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.first-visit-badge {
+  background: linear-gradient(135deg, var(--cta-purple) 0%, var(--cta-pink) 100%);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-full);
+  display: inline-block;
+  margin-bottom: var(--spacing-lg);
+  font-weight: 600;
+  color: white;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.total-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-md);
+  background: var(--surface-light);
+  border-radius: var(--radius-md);
+}
+
+.total-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.total-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+@media (max-width: 480px) {
+  .points-modal {
+    padding: var(--spacing-xl);
+  }
+
+  .points-number {
+    font-size: 3rem;
+  }
+
+  .points-icon {
+    font-size: 3rem;
+  }
+}
