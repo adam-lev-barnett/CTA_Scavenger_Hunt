@@ -28,7 +28,7 @@
 -- ON DELETE CASCADE on child tables means deleting a user cleans up everything
 -- downstream automatically — no orphaned stamp books or entries.
 -- -----------------------------------------------------------------------------
-CREATE TABLE users (
+CREATE TABLE profiles (
     id            BIGSERIAL    PRIMARY KEY,             -- internal DB key, not exposed as a "user ID" in UI
     username      VARCHAR(50)  NOT NULL UNIQUE,         -- display name, must be unique across all players
     email         VARCHAR(255) NOT NULL UNIQUE,         -- login credential, unique per account
@@ -91,7 +91,7 @@ CREATE TABLE stamp_books (
     id      BIGSERIAL PRIMARY KEY,
     user_id BIGINT    NOT NULL UNIQUE,                  -- UNIQUE: one book per user, no exceptions
     CONSTRAINT fk_stamp_books_user FOREIGN KEY (user_id)
-        REFERENCES users(id) ON DELETE CASCADE          -- user deleted → stamp book deleted → entries deleted
+        REFERENCES profiles(id) ON DELETE CASCADE          -- user deleted → stamp book deleted → entries deleted
 );
 
 
