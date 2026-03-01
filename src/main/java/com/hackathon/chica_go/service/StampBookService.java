@@ -3,6 +3,7 @@ package com.hackathon.chica_go.service;
 import com.hackathon.chica_go.dto.StampBookEntryRequest;
 import com.hackathon.chica_go.dto.StampBookEntryResponse;
 import com.hackathon.chica_go.model.PointOfInterest;
+import com.hackathon.chica_go.model.Profile;
 import com.hackathon.chica_go.model.StampBook;
 import com.hackathon.chica_go.model.StampBookEntry;
 import com.hackathon.chica_go.repository.PointOfInterestRepository;
@@ -101,5 +102,27 @@ public class StampBookService {
         } catch (EntityNotFoundException e) {
             return false;
         }
+    }
+
+    public StampBook ensureStampBookSeeded(Profile profile) {
+        StampBook stampBook = stampBookRepository.findByProfileId(profile.getId())
+                .orElseGet(() -> stampBookRepository.save(
+                        StampBook.builder()
+                                .profile(profile)
+                                .build()));
+
+        if (stampBookEntryRepository.countByStampBookId(stampBook.getId()) == 0) {
+            List<PointOfInterest> allPois = pointOfInterestRepository.findAll();
+            List<StampBookEntry> entries = allPois.stream()
+                    .map(poi -> StampBookEntry.builder()
+                            .stampBook(stampBook)
+                            .pointOfInterest(poi)
+                            .visited(false)
+                            .build())
+                    .toList();
+            stampBookEntryRepository.saveAll(entries);
+        }
+
+        return stampBook;
     }
 }

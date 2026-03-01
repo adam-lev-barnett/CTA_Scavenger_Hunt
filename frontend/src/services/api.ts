@@ -116,7 +116,7 @@ export const api = {
     }
 
     return request<CheckInResponse>(
-      '/checkin',
+      'stations/checkin',
       'POST',
       { userId, locationId, userLat, userLng },
       token

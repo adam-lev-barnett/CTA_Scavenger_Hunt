@@ -5,7 +5,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -56,5 +60,27 @@ public class JwtService {
         Claims claims = parseClaims(token);
         Object username = claims.get("username");
         return username == null ? null : username.toString();
+    }
+
+    public Long getAuthenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing authentication");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof Long userId) {
+            return userId;
+        }
+
+        if (principal instanceof String userIdString) {
+            try {
+                return Long.parseLong(userIdString);
+            } catch (NumberFormatException e) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authentication principal");
+            }
+        }
+
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid authentication principal");
     }
 }
