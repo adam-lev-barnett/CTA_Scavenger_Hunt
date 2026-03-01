@@ -39,8 +39,9 @@
 
 .progress-count {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--primary);
+  text-shadow: 0 0 12px rgba(0, 161, 222, 0.4);
 }
 
 .progress-label {
@@ -58,8 +59,11 @@
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--cta-blue) 0%, var(--cta-purple) 50%, var(--cta-red) 100%);
+  background-size: 200% 100%;
   border-radius: var(--radius-full);
   transition: width var(--transition-slow);
+  box-shadow: 0 0 8px rgba(0, 161, 222, 0.5);
+  animation: shimmer 3s ease-in-out infinite;
 }
 
 .stampbook-filters {
@@ -152,6 +156,7 @@
 
 .stamp-card.visited {
   border-color: var(--success);
+  box-shadow: 0 0 14px rgba(0, 155, 58, 0.25);
 }
 
 .stamp-card.unvisited {

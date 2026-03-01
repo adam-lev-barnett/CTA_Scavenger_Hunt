@@ -1,7 +1,7 @@
 :root {
   font-family: Inter, system-ui, sans-serif;
-  color: #111827;
-  background: #f3f4f6;
+  color: #e2e8f0;
+  background: #0a0e1a;
 }
 
 * {
@@ -28,8 +28,30 @@ body {
   gap: 1rem;
   justify-content: space-between;
   padding: 1rem;
-  border-bottom: 1px solid #d1d5db;
-  background: #ffffff;
+  border-bottom: none;
+  background: linear-gradient(180deg, rgba(8, 16, 38, 0.97) 0%, rgba(15, 52, 96, 0.95) 100%);
+  backdrop-filter: blur(16px);
+  position: relative;
+}
+
+.nav-bar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    #c60c30 0%, #00a1de 12.5%, #62361b 25%, #009b3a 37.5%,
+    #f9461c 50%, #522398 62.5%, #e27ea6 75%, #f9e300 87.5%, #c60c30 100%
+  );
+  background-size: 200% 100%;
+  animation: lineScroll 8s linear infinite;
+}
+
+@keyframes lineScroll {
+  0% { background-position: 0% 0%; }
+  100% { background-position: -200% 0%; }
 }
 
 .nav-bar nav {
@@ -40,13 +62,22 @@ body {
 
 .nav-bar a {
   text-decoration: none;
-  color: #1f2937;
-  padding: 0.25rem 0.5rem;
+  color: #94a3b8;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  transition: all 150ms ease;
+}
+
+.nav-bar a:hover {
+  color: #e2e8f0;
+  background: rgba(0, 161, 222, 0.1);
 }
 
 .nav-bar a.active {
   font-weight: 700;
-  border-bottom: 2px solid #111827;
+  color: #fff;
+  background: #00a1de;
+  box-shadow: 0 0 12px rgba(0, 161, 222, 0.5);
 }
 
 .auth-shell {
@@ -62,10 +93,11 @@ body {
 }
 
 .card {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
+  background: linear-gradient(145deg, rgba(15, 52, 96, 0.98) 0%, rgba(10, 35, 70, 0.95) 100%);
+  border: 1px solid rgba(0, 161, 222, 0.18);
   border-radius: 8px;
   padding: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .map-panel {
@@ -82,6 +114,7 @@ body {
 
 .map-header h3 {
   margin: 0;
+  color: #e2e8f0;
 }
 
 .map-container {
@@ -96,31 +129,56 @@ label {
   flex-direction: column;
   margin-bottom: 0.75rem;
   gap: 0.25rem;
+  color: #94a3b8;
 }
 
 input {
   padding: 0.5rem;
-  border: 1px solid #9ca3af;
+  border: 1px solid rgba(0, 161, 222, 0.25);
   border-radius: 6px;
+  background: rgba(15, 52, 96, 0.8);
+  color: #e2e8f0;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #00a1de;
+  box-shadow: 0 0 0 3px rgba(0, 161, 222, 0.2);
 }
 
 button {
-  border: 1px solid #374151;
-  background: #111827;
+  border: 1px solid rgba(0, 161, 222, 0.4);
+  background: linear-gradient(135deg, #00a1de 0%, #0078a8 100%);
   color: #ffffff;
   padding: 0.5rem 0.8rem;
   border-radius: 6px;
   cursor: pointer;
+  transition: all 150ms ease;
+  font-weight: 600;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px rgba(0, 161, 222, 0.45);
 }
 
 button:disabled {
-  opacity: 0.7;
+  opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 button.ghost {
-  background: #ffffff;
-  color: #111827;
+  background: transparent;
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+button.ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
 }
 
 .auth-actions {
@@ -141,7 +199,7 @@ button.ghost {
   align-items: center;
   gap: 1rem;
   padding: 0.6rem 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid rgba(0, 161, 222, 0.1);
 }
 
 .list li:last-child {
@@ -174,12 +232,13 @@ button.ghost {
 
 .nearby-wrap {
   margin-top: 0.75rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid rgba(0, 161, 222, 0.1);
   padding-top: 0.75rem;
 }
 
 .nearby-wrap h4 {
   margin: 0 0 0.5rem;
+  color: #cbd5e1;
 }
 
 .nearby-list {
@@ -194,7 +253,7 @@ button.ghost {
   align-items: center;
   gap: 1rem;
   padding: 0.5rem 0;
-  border-bottom: 1px dashed #e5e7eb;
+  border-bottom: 1px dashed rgba(0, 161, 222, 0.12);
 }
 
 .nearby-list li:last-child {
@@ -203,26 +262,32 @@ button.ghost {
 
 .list small {
   display: block;
-  color: #4b5563;
+  color: #64748b;
 }
 
 .badge {
-  background: #e5e7eb;
+  background: rgba(0, 161, 222, 0.15);
+  border: 1px solid rgba(0, 161, 222, 0.25);
   border-radius: 999px;
   padding: 0.2rem 0.6rem;
   font-size: 0.85rem;
+  color: #94a3b8;
 }
 
 .badge.visited {
-  background: #bbf7d0;
+  background: rgba(0, 155, 58, 0.2);
+  border-color: rgba(0, 155, 58, 0.4);
+  color: #4ade80;
 }
 
 .badge.active {
-  background: #bfdbfe;
+  background: rgba(0, 161, 222, 0.2);
+  border-color: rgba(0, 161, 222, 0.4);
+  color: #38bdf8;
 }
 
 .hint {
-  color: #4b5563;
+  color: #64748b;
 }
 
 .geofence-chip {
@@ -236,29 +301,29 @@ button.ghost {
 }
 
 .geofence-chip.inside {
-  background: #dcfce7;
-  color: #166534;
-  border-color: #86efac;
+  background: rgba(0, 155, 58, 0.2);
+  color: #4ade80;
+  border-color: rgba(0, 155, 58, 0.4);
 }
 
 .geofence-chip.outside {
-  background: #fee2e2;
-  color: #991b1b;
-  border-color: #fca5a5;
+  background: rgba(198, 12, 48, 0.2);
+  color: #f87171;
+  border-color: rgba(198, 12, 48, 0.4);
 }
 
 .geofence-chip.unknown {
-  background: #e5e7eb;
-  color: #374151;
-  border-color: #d1d5db;
+  background: rgba(100, 116, 139, 0.2);
+  color: #94a3b8;
+  border-color: rgba(100, 116, 139, 0.3);
 }
 
 .error {
-  color: #b91c1c;
+  color: #f87171;
 }
 
 .success {
-  color: #166534;
+  color: #4ade80;
 }
 
 .inline-form {
@@ -275,9 +340,17 @@ table {
 
 th,
 td {
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid rgba(0, 161, 222, 0.1);
   text-align: left;
   padding: 0.5rem;
+  color: #cbd5e1;
+}
+
+th {
+  color: #64748b;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
 }
 
 @media (max-width: 640px) {

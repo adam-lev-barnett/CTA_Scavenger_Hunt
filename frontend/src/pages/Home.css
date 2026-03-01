@@ -11,6 +11,31 @@
   position: relative;
   overflow: hidden;
   padding: var(--spacing-2xl);
+  background: radial-gradient(ellipse at 50% 40%, rgba(0, 161, 222, 0.1) 0%, transparent 65%);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(0, 161, 222, 0.1) 0%, transparent 70%);
+  animation: cityGlow 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  right: 8%;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(82, 35, 152, 0.12) 0%, transparent 70%);
+  animation: cityGlow 9s ease-in-out infinite reverse;
+  pointer-events: none;
 }
 
 .hero-content {
@@ -27,11 +52,16 @@
 
 .hero-title {
   font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: -1px;
   margin-bottom: var(--spacing-md);
-  background: linear-gradient(135deg, var(--primary) 0%, var(--cta-purple) 50%, var(--cta-red) 100%);
+  background: linear-gradient(270deg, var(--primary), #6dd5ed, var(--cta-purple), var(--cta-red), var(--primary));
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: shimmer 6s ease-in-out infinite;
+  text-shadow: none;
 }
 
 .hero-subtitle {
@@ -63,14 +93,37 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 8px;
+  height: 6px;
   display: flex;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.4);
 }
 
 .train-lines .line {
   flex: 1;
   height: 100%;
+  position: relative;
+  overflow: hidden;
 }
+
+.train-lines .line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 80px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.45);
+  animation: trainShine 4.5s linear infinite;
+}
+
+.train-lines .line:nth-child(1)::after { animation-delay: 0s; }
+.train-lines .line:nth-child(2)::after { animation-delay: 0.6s; }
+.train-lines .line:nth-child(3)::after { animation-delay: 1.2s; }
+.train-lines .line:nth-child(4)::after { animation-delay: 1.8s; }
+.train-lines .line:nth-child(5)::after { animation-delay: 2.4s; }
+.train-lines .line:nth-child(6)::after { animation-delay: 3.0s; }
+.train-lines .line:nth-child(7)::after { animation-delay: 3.6s; }
+.train-lines .line:nth-child(8)::after { animation-delay: 4.2s; }
 
 .train-lines .line.red { background: var(--cta-red); }
 .train-lines .line.blue { background: var(--cta-blue); }
@@ -84,7 +137,8 @@
 /* Features Section */
 .features {
   padding: var(--spacing-2xl) 0;
-  background: var(--surface);
+  background: linear-gradient(180deg, rgba(10, 35, 70, 0.6) 0%, rgba(15, 52, 96, 0.4) 100%);
+  backdrop-filter: blur(4px);
 }
 
 .section-title {
@@ -102,16 +156,35 @@
 .feature-card {
   text-align: center;
   padding: var(--spacing-xl);
-  background: var(--background);
+  background: linear-gradient(145deg, rgba(10, 20, 50, 0.95) 0%, rgba(15, 52, 96, 0.7) 100%);
   border-radius: var(--radius-xl);
-  border: 1px solid var(--surface-light);
-  transition: all var(--transition-fast);
+  border: 1px solid rgba(0, 161, 222, 0.15);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--cta-purple));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-normal);
+}
+
+.feature-card:hover::before {
+  transform: scaleX(1);
 }
 
 .feature-card:hover {
   transform: translateY(-8px);
-  box-shadow: var(--shadow-xl);
-  border-color: var(--primary);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 161, 222, 0.15);
+  border-color: rgba(0, 161, 222, 0.4);
 }
 
 .feature-icon {
@@ -200,7 +273,7 @@
 /* Footer CTA */
 .footer-cta {
   padding: var(--spacing-2xl) 0;
-  background: var(--surface);
+  background: linear-gradient(180deg, rgba(15, 52, 96, 0.5) 0%, rgba(10, 20, 50, 0.8) 100%);
   text-align: center;
 }
 

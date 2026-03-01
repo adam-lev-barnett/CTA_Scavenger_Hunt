@@ -16,8 +16,10 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at 30% 70%, rgba(0, 161, 222, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 70% 30%, rgba(82, 35, 152, 0.1) 0%, transparent 50%);
+  background:
+    radial-gradient(circle at 30% 70%, rgba(0, 161, 222, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(82, 35, 152, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 55% 55%, rgba(198, 12, 48, 0.06) 0%, transparent 40%);
   animation: rotate 60s linear infinite;
 }
 
@@ -29,11 +31,11 @@
 .auth-container {
   width: 100%;
   max-width: 420px;
-  background: var(--surface);
+  background: linear-gradient(145deg, rgba(12, 42, 80, 0.98) 0%, rgba(15, 52, 96, 0.95) 100%);
   border-radius: var(--radius-xl);
   padding: var(--spacing-2xl);
-  box-shadow: var(--shadow-xl);
-  border: 1px solid var(--surface-light);
+  box-shadow: var(--shadow-xl), 0 0 40px rgba(0, 161, 222, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 161, 222, 0.25);
   position: relative;
   z-index: 1;
   overflow: hidden;

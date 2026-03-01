@@ -1,11 +1,35 @@
 .navigation {
-  background: var(--surface);
-  border-bottom: 2px solid var(--surface-light);
+  background: linear-gradient(180deg, rgba(8, 16, 38, 0.97) 0%, rgba(15, 52, 96, 0.95) 100%);
+  border-bottom: none;
   padding: var(--spacing-md) 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.navigation::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--cta-red) 0%,
+    var(--cta-blue) 12.5%,
+    var(--cta-brown) 25%,
+    var(--cta-green) 37.5%,
+    var(--cta-orange) 50%,
+    var(--cta-purple) 62.5%,
+    var(--cta-pink) 75%,
+    var(--cta-yellow) 87.5%,
+    var(--cta-red) 100%
+  );
+  background-size: 200% 100%;
+  animation: lineScroll 8s linear infinite;
 }
 
 .nav-container {
@@ -32,10 +56,12 @@
 }
 
 .logo-text {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--cta-purple) 100%);
+  background: linear-gradient(270deg, var(--primary), #6dd5ed, var(--cta-purple), var(--primary));
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: logoShimmer 5s ease-in-out infinite;
 }
 
 .nav-links {
@@ -63,6 +89,7 @@
 .nav-link.active {
   background: var(--primary);
   color: white;
+  box-shadow: 0 0 14px rgba(0, 161, 222, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .nav-icon {
