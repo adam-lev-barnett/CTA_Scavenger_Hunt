@@ -7,12 +7,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "profiles")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class Profile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +39,23 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private StampBook stampBook;
+    @OneToOne(mappedBy = "profile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Getter private StampBook stampBook;
+
+    @Transient
+    Boolean visitedPoi(PointOfInterest pointOfInterest) {
+        return this.stampBook.getEntries().contains(pointOfInterest);
+    }
+
+    @Transient
+    void addPoints(int points) {
+        weeklyScore += points;
+    }
+
+    @Transient
+    void resetPoints() {
+        weeklyScore = 0;
+    }
+
+
 }

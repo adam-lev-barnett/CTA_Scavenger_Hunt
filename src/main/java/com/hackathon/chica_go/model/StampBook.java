@@ -15,14 +15,14 @@ public class StampBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Getter private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, unique = true,
+    @JoinColumn(name = "profile_id", nullable = false, unique = true,
                 foreignKey = @ForeignKey(name = "fk_stamp_books_user"))
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private User user;
+    private Profile profile;
 
     @OneToMany(mappedBy = "stampBook", cascade = CascadeType.ALL,
                orphanRemoval = true, fetch = FetchType.LAZY)
