@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Slf4j
 public class GeofencingService {
 
-    @Value("${geofence.radius.meters:150}")
+    @Value("${geofence.radius.meters:600}")
     private double radiusMeters;
 
     private static final double EARTH_RADIUS_METERS = 6371000.0; // Earth's radius in meters
