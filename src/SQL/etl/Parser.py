@@ -26,9 +26,19 @@ def Parser(filename, point=10) -> list:
 
         name = properties.get("name")
         geom_type = geometry.get("type")
-        coordinates = geometry.get("coordinates")
 
-        if name and geom_type == "Point" and isinstance(coordinates, list) and len(coordinates) == 2:
+        # really bad parsing, but it's a quick fix
+        # nothing more permanent than a temporary fix 
+        if geom_type == "Point":
+            coordinates = geometry.get("coordinates")
+        elif len(geometry.get("coordinates")[0]) == 2:
+            coordinates = geometry.get("coordinates")[0]
+        elif len(geometry.get("coordinates")[0][0]) == 2:
+            coordinates = geometry.get("coordinates")[0][0]
+        else:
+            coordinates = []
+
+        if name and isinstance(coordinates, list) and len(coordinates) == 2:
             lon, lat = coordinates
             results.append({
                 "name": name,
@@ -86,5 +96,5 @@ def test_nearest_station():
 
 if __name__ == "__main__":
     _stations, _pois = build_poi_list("poi.geojson", "stations.geojson")
-    print("stations: ", _stations)
-    print("pois: ", _pois)
+    print(f"stations {len(_stations)} locations: ", _stations)
+    print(f"pois {len(_pois)} locations: ", _pois)
