@@ -16,6 +16,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
 
+// AI generated
+
 @Service
 public class JwtService {
 

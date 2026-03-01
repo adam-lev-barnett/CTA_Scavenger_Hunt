@@ -20,6 +20,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// Boilerplate by AI, class structure, endpoint connection, and any business logic more complex than CRUD was created by the team
+
 @RestController
 @RequiredArgsConstructor
 @Transactional

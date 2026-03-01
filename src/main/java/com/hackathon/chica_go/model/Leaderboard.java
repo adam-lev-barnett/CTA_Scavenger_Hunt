@@ -3,6 +3,8 @@ package com.hackathon.chica_go.model;
 import java.util.ArrayList;
 import java.util.List;
 
+// AI generated; team refactored
+
 public class Leaderboard {
 
     private final List<Entry> entries;

@@ -2,6 +2,8 @@ package com.hackathon.chica_go.model;
 
 import java.time.LocalDateTime;
 
+
+// Only comments are AI generated
 public class CheckIn {
 
     private final ScoreCalculator scoreCalculator;

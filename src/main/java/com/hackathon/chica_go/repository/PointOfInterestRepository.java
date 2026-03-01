@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.util.List;
 
+//SQL queries written by AI
 @Repository
 public interface PointOfInterestRepository extends JpaRepository<PointOfInterest, Long> {
 

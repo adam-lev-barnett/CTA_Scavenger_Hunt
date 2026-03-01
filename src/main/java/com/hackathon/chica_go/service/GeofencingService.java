@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+// AI generated
+
 /**
  * Service to validate user proximity to locations (geofencing)
  * Uses Haversine formula for distance calculation

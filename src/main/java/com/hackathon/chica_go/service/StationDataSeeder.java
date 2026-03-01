@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+// AI generated
+
 /**
  * Seeds the database with CTA station data on application startup
  * Only runs if the stations table is empty

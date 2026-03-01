@@ -16,6 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// CRUD boilerplate AI generated; class design/architecture done by team
+
 @RestController
 @RequiredArgsConstructor
 @Transactional

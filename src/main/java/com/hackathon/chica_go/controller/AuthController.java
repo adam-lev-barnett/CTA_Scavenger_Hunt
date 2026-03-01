@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+//AI generated, refactored by us
 @RestController
 @RequiredArgsConstructor
 @Transactional

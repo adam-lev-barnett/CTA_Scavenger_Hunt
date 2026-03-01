@@ -18,6 +18,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+// Seeding logic by AI; the rest is team-generated
+
 @Service
 @RequiredArgsConstructor
 @Transactional
