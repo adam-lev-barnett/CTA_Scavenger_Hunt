@@ -29,9 +29,24 @@ export default function LoginPage() {
     }
   }
 
-  function onDemoLogin() {
+  async function onDemoLogin() {
     setError(null);
-    login(DEMO_TOKEN, DEMO_USER_ID);
+    setLoading(true);
+    try {
+      let response;
+      try {
+        response = await api.login('demo@local.test', 'demo-password');
+      } catch {
+        // Demo user doesn't exist yet — create them
+        response = await api.register('demo-rider', 'demo@local.test', 'demo-password');
+      }
+      login(response.token, response.userId);
+    } catch {
+      // Backend unavailable — fall back to offline demo
+      login(DEMO_TOKEN, DEMO_USER_ID);
+    } finally {
+      setLoading(false);
+    }
     navigate('/map');
   }
 
@@ -65,11 +80,11 @@ export default function LoginPage() {
           <button type="submit" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
-          <button type="button" className="ghost" onClick={onDemoLogin}>
-            Use Demo User (Offline)
+          <button type="button" className="ghost" onClick={onDemoLogin} disabled={loading}>
+            Use Demo User
           </button>
         </div>
-        <p className="hint">Use demo mode when backend/database is unavailable.</p>
+        <p className="hint">Demo mode uses the real database when available, or offline data as fallback.</p>
         <p>
           Need an account? <Link to="/register">Create one</Link>
         </p>
