@@ -284,6 +284,15 @@ export default function MapPage() {
     };
   }, [currentPosition, stations]);
 
+  const nearestFiveStations = useMemo<Station[]>(() => {
+    const sorted = [...stations].sort((a, b) => {
+      const da = stationDistance(a) ?? Number.POSITIVE_INFINITY;
+      const db = stationDistance(b) ?? Number.POSITIVE_INFINITY;
+      return da - db;
+    });
+    return sorted.slice(0, 5);
+  }, [currentPosition, stations]);
+
   async function fetchNearbyPois(stationId: number) {
     if (nearbyByStationId[stationId]) {
       return;
@@ -432,7 +441,7 @@ export default function MapPage() {
           <p>No stations loaded yet.</p>
         ) : (
           <ul className="list">
-            {stations.map((station) => (
+            {nearestFiveStations.map((station) => (
               <li key={station.id} className="station-item">
                 <div className="station-row">
                   <div>
