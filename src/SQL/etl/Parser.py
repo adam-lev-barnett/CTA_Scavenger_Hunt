@@ -1,10 +1,16 @@
+"""
+Helper module for parsing GeoJSON
+and testing parsed output format
+"""
+
 import os
 import json
 import numpy as np
 
-def Parser(filename, point=10):
+def Parser(filename, point=10) -> list:
     """
-    outputs a list of dict
+    Given a GeoJSON filename return a parsed list of 
+    dicts for ETL upload process
     """
     base_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(base_dir, filename)
@@ -20,9 +26,19 @@ def Parser(filename, point=10):
 
         name = properties.get("name")
         geom_type = geometry.get("type")
-        coordinates = geometry.get("coordinates")
 
-        if name and geom_type == "Point" and isinstance(coordinates, list) and len(coordinates) == 2:
+        # really bad parsing, but it's a quick fix
+        # nothing more permanent than a temporary fix 
+        if geom_type == "Point":
+            coordinates = geometry.get("coordinates")
+        elif len(geometry.get("coordinates")[0]) == 2:
+            coordinates = geometry.get("coordinates")[0]
+        elif len(geometry.get("coordinates")[0][0]) == 2:
+            coordinates = geometry.get("coordinates")[0][0]
+        else:
+            coordinates = []
+
+        if name and isinstance(coordinates, list) and len(coordinates) == 2:
             lon, lat = coordinates
             results.append({
                 "name": name,
@@ -33,14 +49,16 @@ def Parser(filename, point=10):
 
     return results
 
-def get_nearest_station(poi:dict, stations:list) -> dict:
+def get_nearest_station(poi:dict, stations:list) -> str:
     """
+    Given a point of interest and a list of staions
+    return the nearest station name from the list of stations
     """
     _stations = []
     poi_pt = np.array((poi['latitude'], poi['longitude']))
     for station in stations:
         station_pt = np.array((station['latitude'], station['longitude']))
-        _dist = np.linalg.norm(poi_pt - station_pt)
+        _dist = np.linalg.norm(poi_pt - station_pt) # L2/distance function
         _stations.append((_dist, station['name']))
     
     _stations = list(sorted(_stations, key=lambda x: x[0]))
@@ -48,7 +66,9 @@ def get_nearest_station(poi:dict, stations:list) -> dict:
 
 def build_poi_list(poi_filepath, stations_filepath) -> tuple:
     """
-    return a list of dicts from both datasets
+    Given filepaths of the point of interest and stations
+    GeoJSON files return a tuple of lists containing
+    stations and POI data.
     """
     stations = Parser(stations_filepath)
     _pois = Parser(poi_filepath, 5)
@@ -63,16 +83,18 @@ def build_poi_list(poi_filepath, stations_filepath) -> tuple:
                 "points": _poi["points"]
             }
         )
-
     return (stations, pois)
 
-
 def test_nearest_station():
+    """
+    Simple testing module for checking output formatting
+    and nearest station result
+    """
     pois = Parser("poi.geojson")
     stations = Parser("stations.geojson", 5)
     return get_nearest_station(pois[0], stations)
 
 if __name__ == "__main__":
-    _out = build_poi_list("poi.geojson", "stations.geojson")
-    print("stations: ", _out[0])
-    print("pois: ", _out[1])
+    _stations, _pois = build_poi_list("poi.geojson", "stations.geojson")
+    print(f"stations {len(_stations)} locations: ", _stations)
+    print(f"pois {len(_pois)} locations: ", _pois)
