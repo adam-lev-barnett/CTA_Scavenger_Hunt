@@ -1,14 +1,10 @@
 package com.hackathon.chica_go.model;
 
-import com.hackathon.chica_go.repository.ProfileRepository;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import java.util.List;
 
 @Entity
 @Table(name = "point_of_interests")
@@ -35,37 +31,13 @@ public class PointOfInterest {
     @Builder.Default
     private int points = 0;
 
-    /*
+    // Null = standalone POI; equal to id = this row IS the station; otherwise = linked to a station
+    @Column(name = "station_id")
+    private Long stationId;
+
     @OneToMany(mappedBy = "pointOfInterest", fetch = FetchType.LAZY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<StampBookEntry> stampBookEntries;
-     */
-
-    @Transient
-    private CheckIn checkIn;
-
-    @Transient
-    private final ScoreCalculator scoreCalculator = new ScoreCalculator();
-
-    @Transient
-    private ProfileRepository profileRepository;
-
-    public CheckIn.CheckInResult checkInProfile(Profile profile) {
-        if (profile == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "profile is null");
-
-        boolean isFirstVisit = profile.visitedPoi(this);
-
-        int pointsEarned = scoreCalculator.calculatePoints(points, isFirstVisit);
-
-        profile.addPoints(pointsEarned);
-
-        scoreCalculator.applyPointsToProfile(profile, pointsEarned);
-
-        entry.setVisited(true);
-        entry.setVisitedAt(LocalDateTime.now());
-
-        return new CheckIn.CheckInResult(pointsEarned, user.getWeeklyScore(), isFirstVisit);
-    }
 
 }
