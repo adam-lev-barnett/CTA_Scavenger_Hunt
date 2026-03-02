@@ -1,5 +1,6 @@
 package com.hackathon.chica_go.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class StampBook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter private Long id;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false, unique = true,
                 foreignKey = @ForeignKey(name = "fk_stamp_books_user"))
@@ -24,6 +26,7 @@ public class StampBook {
     @EqualsAndHashCode.Exclude
     private Profile profile;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "stampBook", cascade = CascadeType.ALL,
                orphanRemoval = true, fetch = FetchType.LAZY)
     @ToString.Exclude

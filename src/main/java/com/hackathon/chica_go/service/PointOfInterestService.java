@@ -1,7 +1,5 @@
 package com.hackathon.chica_go.service;
 
-import com.hackathon.chica_go.dto.StampBookEntryRequest;
-import com.hackathon.chica_go.dto.StampBookEntryResponse;
 import com.hackathon.chica_go.model.*;
 import com.hackathon.chica_go.repository.PointOfInterestRepository;
 import com.hackathon.chica_go.repository.ProfileRepository;
@@ -27,7 +25,6 @@ public class PointOfInterestService {
     private final PointOfInterestRepository pointOfInterestRepository;
     private final StampBookEntryRepository stampBookEntryRepository;
     private final StampBookRepository stampBookRepository;
-    private final StampBookService stampBookService;
 
     public List<PointOfInterest> getAllPois() {
         return pointOfInterestRepository.findAll();
@@ -74,26 +71,28 @@ public class PointOfInterestService {
     public CheckInResultDTO checkInProfile(long userId, Long poiId) {
 
         PointOfInterest poi = pointOfInterestRepository.findById(poiId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "POI not found"));
         Profile foundProfile = profileRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "profile not found"));
         StampBook stampBook = stampBookRepository.findByProfileId(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "stampBook not found"));
 
-        boolean isFirstVisit = profileService.visitedPoi(foundProfile.getId(), poi.getId());
+        // Find the pre-existing entry (created at registration), or create one if missing
+        StampBookEntry entry = stampBookEntryRepository
+                .findByStampBookIdAndPointOfInterestId(stampBook.getId(), poiId)
+                .orElseGet(() -> StampBookEntry.builder()
+                        .stampBook(stampBook)
+                        .pointOfInterest(poi)
+                        .build());
 
-        StampBookEntryRequest stampBookEntryRequest = new StampBookEntryRequest(poi.getId(), poi.getId(), stampBook.getId());
+        boolean isFirstVisit = !entry.isVisited();
 
-        StampBookEntryResponse entryResponse = stampBookService.addStamp(stampBookEntryRequest);
+        entry.setVisited(true);
+        entry.setVisitedAt(LocalDateTime.now());
+        stampBookEntryRepository.save(entry);
 
-        int pointsEarned = scoreCalculator.calculatePoints(foundProfile.getWeeklyScore(), isFirstVisit);
-
-        foundProfile.addPoints(pointsEarned);
-
-        StampBookEntry addedEntry = stampBookEntryRepository.findById(entryResponse.id())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        addedEntry.setVisitedAt(LocalDateTime.now());
+        int pointsEarned = scoreCalculator.calculatePoints(poi.getPoints(), isFirstVisit);
+        scoreCalculator.applyPointsToProfile(foundProfile, pointsEarned);
 
         return new CheckInResultDTO(pointsEarned, foundProfile.getWeeklyScore(), isFirstVisit);
     }

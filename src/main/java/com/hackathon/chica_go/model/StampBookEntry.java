@@ -1,5 +1,7 @@
 package com.hackathon.chica_go.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hackathon.chica_go.converter.LocalDateTimeConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +25,7 @@ public class StampBookEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stamp_book_id", nullable = false,
                 foreignKey = @ForeignKey(name = "fk_entries_stamp_book"))
@@ -30,7 +33,7 @@ public class StampBookEntry {
     @EqualsAndHashCode.Exclude
     @Getter private StampBook stampBook;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "location_id", nullable = false,
                 foreignKey = @ForeignKey(name = "fk_entries_location"))
     @ToString.Exclude
@@ -42,6 +45,7 @@ public class StampBookEntry {
     @Getter private boolean visited = false;
 
     // NULL until the user checks in — matches schema intent
+    @Convert(converter = LocalDateTimeConverter.class)
     @Column(name = "visited_at")
     @Setter @Getter private LocalDateTime visitedAt;
 }

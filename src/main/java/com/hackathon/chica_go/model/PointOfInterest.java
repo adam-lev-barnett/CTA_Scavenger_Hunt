@@ -1,5 +1,6 @@
 package com.hackathon.chica_go.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +36,7 @@ public class PointOfInterest {
     @Column(name = "station_id")
     private Long stationId;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "pointOfInterest", fetch = FetchType.LAZY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
