@@ -75,12 +75,10 @@ export const api = {
     }
 
     const endpoints = [
+      `/pois/${stationId}/nearby`,
       `/stations/${stationId}/nearby`,
-      `/point-of-interest/station/${stationId}`,
-      `/point-of-interests/station/${stationId}`,
       `/pois/station/${stationId}`,
-      `/point-of-interests?stationId=${stationId}`,
-      `/point-of-interest?stationId=${stationId}`,
+      `/pois?stationId=${stationId}`,
     ];
 
     let lastError: Error | null = null;
@@ -108,9 +106,9 @@ export const api = {
     }
 
     return request<CheckInResponse>(
-      '/checkin',
+      '/pois/check-in',
       'POST',
-      { userId, locationId, userLat, userLng },
+      { userId, poiId: locationId },
       token
     );
   },

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import java.util.List;
 @RestController
 @RequestMapping("/users")
@@ -38,13 +40,14 @@ public class ProfileController {
     }
 
     /**
-     * PATCH /users/{userId}?username=newName
+     * PATCH /users/{userId}
+     * Body: { "username": "newName" }
      */
     @PatchMapping("/{userId}")
     public ResponseEntity<Profile> updateUsername(
             @PathVariable Long userId,
-            @RequestParam String username) {
-        return ResponseEntity.ok(profileService.updateUsername(userId, username));
+            @RequestBody Map<String, String> body) {
+        return ResponseEntity.ok(profileService.updateUsername(userId, body.get("username")));
     }
 
     /**

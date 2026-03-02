@@ -6,7 +6,7 @@ import { api } from '../services/api';
 import type { CheckInResponse, PointOfInterest, Station } from '../types';
 
 const DEFAULT_LOOP_CENTER: [number, number] = [41.883, -87.629];
-const STATION_CHECKIN_RADIUS_METERS = 140;
+const STATION_CHECKIN_RADIUS_METERS = 6000;
 
 type GeoPoint = {
   lat: number;
