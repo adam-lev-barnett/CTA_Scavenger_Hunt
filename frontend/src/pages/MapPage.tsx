@@ -27,6 +27,7 @@ export default function MapPage() {
   const hasAutoCenteredRef = useRef(false);
 
   const [stations, setStations] = useState<Station[]>([]);
+  const [showClosestOnly, setShowClosestOnly] = useState(false);
   const [nearbyByStationId, setNearbyByStationId] = useState<Record<number, PointOfInterest[]>>({});
   const [unlockedStations, setUnlockedStations] = useState<Record<number, true>>({});
   const [visitedLocationIds, setVisitedLocationIds] = useState<Record<number, true>>({});
@@ -141,6 +142,20 @@ export default function MapPage() {
     }
   }, [currentPosition]);
 
+  const displayedStations = useMemo(() => {
+    if (!showClosestOnly || !currentPosition) {
+      return stations;
+    }
+    return [...stations]
+      .map((station) => ({
+        station,
+        distance: distanceMeters(currentPosition, { lat: station.latitude, lng: station.longitude }),
+      }))
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 5)
+      .map(({ station }) => station);
+  }, [stations, currentPosition, showClosestOnly]);
+
   useEffect(() => {
     if (!stationsLayerRef.current) {
       return;
@@ -149,7 +164,7 @@ export default function MapPage() {
     const layer = stationsLayerRef.current;
     layer.clearLayers();
 
-    stations.forEach((station) => {
+    displayedStations.forEach((station) => {
       const atStation = isAtStation(station);
       const isActive = activeStationId === station.id;
       const color = isActive ? '#16a34a' : atStation ? '#ca8a04' : '#374151';
@@ -166,7 +181,7 @@ export default function MapPage() {
         })
         .addTo(layer);
     });
-  }, [stations, activeStationId, currentPosition]);
+  }, [displayedStations, activeStationId, currentPosition]);
 
   useEffect(() => {
     let mounted = true;
@@ -426,12 +441,22 @@ export default function MapPage() {
       </div>
 
       <div className="card">
-        <h3>CTA Stations</h3>
+        <div className="map-header">
+          <h3>CTA Stations</h3>
+          <button
+            className={showClosestOnly ? '' : 'ghost'}
+            onClick={() => setShowClosestOnly((v) => !v)}
+            disabled={!currentPosition}
+            title={!currentPosition ? 'Waiting for GPS to filter by distance' : undefined}
+          >
+            {showClosestOnly ? '5 Closest' : 'All Stations'}
+          </button>
+        </div>
         {stations.length === 0 ? (
           <p>No stations loaded yet.</p>
         ) : (
           <ul className="list">
-            {stations.map((station) => (
+            {displayedStations.map((station) => (
               <li key={station.id} className="station-item">
                 <div className="station-row">
                   <div>
