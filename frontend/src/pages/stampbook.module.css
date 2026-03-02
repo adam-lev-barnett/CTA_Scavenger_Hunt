@@ -1,0 +1,33 @@
+.stampGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.stamp {
+    aspect-ratio: 1;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 0.65rem;
+    filter: grayscale(1) opacity(0.4);
+    transition: var(--transition);
+}
+
+.collected {
+    filter: grayscale(0) opacity(1);
+    background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1), transparent);
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(0, 161, 222, 0.15);
+}
+
+.collected:hover {
+    transform: scale(1.05) rotate(2deg);
+}

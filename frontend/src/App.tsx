@@ -1,6 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import ProtectedRoute from './components/ProtectedRoute';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import LoginPage from './pages/LoginPage';
 import MapPage from './pages/MapPage';
@@ -10,17 +12,17 @@ import StampBookPage from './pages/StampBookPage';
 
 function ProtectedLayout() {
   return (
-    <div className="layout">
+    <div className="min-h-screen flex flex-col">
       <NavBar />
-      <main className="container">
-        <Routes>
-          <Route path="/map" element={<MapPage />} />
-          <Route path="/stampbook" element={<StampBookPage />} />
-          <Route path="/leaderboard" element={<LeaderboardPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="*" element={<Navigate to="/map" replace />} />
-        </Routes>
-      </main>
+      <Routes>
+        <Route path="/map"         element={<MapPage />} />
+        <Route path="/stampbook"   element={<StampBookPage />} />
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
+        <Route path="/profile"     element={<ProfilePage />} />
+        <Route path="/about"       element={<AboutPage />} />
+        <Route path="/contact"     element={<ContactPage />} />
+        <Route path="*"            element={<Navigate to="/map" replace />} />
+      </Routes>
     </div>
   );
 }
@@ -28,7 +30,7 @@ function ProtectedLayout() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login"    element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/*" element={<ProtectedLayout />} />

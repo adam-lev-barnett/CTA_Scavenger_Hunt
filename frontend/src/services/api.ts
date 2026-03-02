@@ -97,8 +97,8 @@ export const api = {
   async checkIn(
     userId: number,
     locationId: number,
-    userLat: number,
-    userLng: number,
+    _userLat: number,
+    _userLng: number,
     token?: string
   ): Promise<CheckInResponse> {
     if (isDemoToken(token)) {
