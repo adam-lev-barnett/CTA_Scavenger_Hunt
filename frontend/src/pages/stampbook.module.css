@@ -1,33 +1,196 @@
-.stampGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 1rem;
-    padding: 1rem 0;
+.page {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  animation: fade-up 0.35s ease-out both;
 }
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.025em;
+}
+
+.pageSubtitle {
+  font-size: 0.875rem;
+  color: #71717a;
+  margin-top: 0.25rem;
+}
+
+.counter { text-align: right; }
+
+.counterNum {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: white;
+}
+
+.counterSlash {
+  color: #52525b;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.counterLabel {
+  font-size: 0.75rem;
+  color: #52525b;
+  margin-top: 0.125rem;
+}
+
+/* ── Error ── */
+.errorMsg {
+  font-size: 0.875rem;
+  color: #f87171;
+  background: rgb(239 68 68 / 0.1);
+  border: 1px solid rgb(239 68 68 / 0.2);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Progress bar ── */
+.progressSection { margin-bottom: 2rem; }
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #52525b;
+  margin-bottom: 0.5rem;
+}
+
+.progressBar {
+  height: 0.375rem;
+  background: #27272a;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--cta-blue);
+  border-radius: 9999px;
+  transition: width 0.7s;
+}
+
+/* ── Loading spinner ── */
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 5rem 0;
+}
+
+.spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: 2px solid var(--cta-blue);
+  border-top-color: transparent;
+  animation: spin 0.7s linear infinite;
+}
+
+/* ── Empty state ── */
+.emptyCard {
+  background-color: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 0.75rem;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 1.875rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.emptyText {
+  color: #71717a;
+  font-size: 0.875rem;
+}
+
+/* ── Stamp grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px)  { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 768px)  { .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 
 .stamp {
-    aspect-ratio: 1;
-    background: var(--surface);
-    border: 1px solid var(--glass-border);
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    text-align: center;
-    font-size: 0.65rem;
-    filter: grayscale(1) opacity(0.4);
-    transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid;
+  text-align: center;
+  transition: all 0.2s;
+  animation: fade-up 0.35s ease-out both;
 }
 
-.collected {
-    filter: grayscale(0) opacity(1);
-    background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1), transparent);
-    border-color: var(--primary);
-    box-shadow: 0 0 20px rgba(0, 161, 222, 0.15);
+.stampVisited {
+  background: #18181b;
+  border-color: #3f3f46;
 }
 
-.collected:hover {
-    transform: scale(1.05) rotate(2deg);
+.stampVisited:hover { border-color: #52525b; }
+
+.stampUnvisited {
+  background: rgb(24 24 27 / 0.4);
+  border-color: rgb(39 39 42 / 0.6);
+  opacity: 0.5;
+}
+
+.stampCircle {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 2px solid;
+}
+
+.stampCircleVisited {
+  border-color: rgb(0 161 222 / 0.3);
+  background: rgb(0 161 222 / 0.08);
+}
+
+.stampCircleUnvisited {
+  border-color: #3f3f46;
+  filter: grayscale(1);
+}
+
+.stampName {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.stampNameVisited { color: #d4d4d8; }
+.stampNameUnvisited { color: #52525b; }
+
+.stampDate {
+  font-size: 0.625rem;
+  color: #52525b;
 }

@@ -1,6 +1,7 @@
 import { BookOpen, HelpCircle, LayoutGrid, Mail, Trophy, User } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import styles from './navbar.module.css';
 
 const NAV = [
   { to: '/map',         label: 'Explore',    Icon: LayoutGrid },
@@ -17,32 +18,25 @@ export default function NavBar() {
   const { logout }   = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 h-14 flex items-center justify-between px-6 bg-zinc-950/90 backdrop-blur-xl border-b border-white/[0.06]">
+    <header className={styles.header}>
 
       {/* Brand */}
-      <Link to="/map" className="flex items-center gap-2.5 shrink-0 group">
-        <div className="w-7 h-7 rounded-md bg-cta-blue flex items-center justify-center text-sm">
-          🚇
-        </div>
-        <span className="font-display font-700 text-[15px] tracking-tight text-white">
-          Chica<span className="text-cta-blue">-Go</span>
+      <Link to="/map" className={styles.brand}>
+        <div className={styles.logoBox}>🚇</div>
+        <span className={styles.brandName}>
+          Chica<span className={styles.brandAccent}>-Go</span>
         </span>
       </Link>
 
       {/* Nav */}
-      <nav className="flex items-center gap-0.5">
+      <nav className={styles.nav}>
         {NAV.map(({ to, label, Icon }) => {
           const active = pathname === to;
           return (
             <Link
               key={to}
               to={to}
-              className={[
-                'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium transition-all duration-150',
-                active
-                  ? 'text-cta-blue bg-cta-blue/10'
-                  : 'text-zinc-400 hover:text-zinc-100 hover:bg-white/5',
-              ].join(' ')}
+              className={`${styles.navLink} ${active ? styles.navLinkActive : styles.navLinkInactive}`}
             >
               <Icon size={13} strokeWidth={active ? 2.5 : 2} />
               {label}
@@ -54,7 +48,7 @@ export default function NavBar() {
       {/* Sign out */}
       <button
         onClick={() => { logout(); navigate('/login'); }}
-        className="btn btn-ghost text-xs shrink-0"
+        className={styles.signOut}
       >
         Sign out
       </button>

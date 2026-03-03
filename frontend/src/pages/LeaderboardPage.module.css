@@ -1,0 +1,194 @@
+.page {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  animation: fade-up 0.35s ease-out both;
+}
+
+.pageTitle {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.025em;
+}
+
+.pageSubtitle {
+  font-size: 0.875rem;
+  color: #71717a;
+  margin-top: 0.25rem;
+}
+
+.errorMsg {
+  font-size: 0.875rem;
+  color: #f87171;
+  background: rgb(239 68 68 / 0.1);
+  border: 1px solid rgb(239 68 68 / 0.2);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
+}
+
+.spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: 2px solid var(--cta-blue);
+  border-top-color: transparent;
+  animation: spin 0.7s linear infinite;
+}
+
+.emptyCard {
+  background-color: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 0.75rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.emptyText {
+  color: #71717a;
+  font-size: 0.875rem;
+}
+
+/* ── Top 3 podium ── */
+.top3Grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.podiumCard {
+  background-color: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 0.75rem;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.podiumCard1st {
+  background-color: rgb(0 161 222 / 0.05);
+  border-color: rgb(0 161 222 / 0.25);
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
+}
+
+.podiumMedal { font-size: 1.5rem; }
+.podiumMedal1st { font-size: 1.875rem; }
+
+.podiumRank {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #52525b;
+  margin-top: 0.25rem;
+}
+
+.podiumRank1st { color: #71717a; }
+
+.podiumName {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.podiumScore {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #d4d4d8;
+}
+
+.podiumScore1st {
+  font-size: 1.5rem;
+  color: var(--cta-blue);
+}
+
+/* ── Rest of list ── */
+.restList {
+  background-color: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.restList > * + * {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.restRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1.25rem;
+  transition: background-color 0.15s;
+}
+
+.restRow:hover { background: rgba(255, 255, 255, 0.02); }
+
+.restRank {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #52525b;
+  width: 1.5rem;
+  flex-shrink: 0;
+}
+
+.restName {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #d4d4d8;
+  flex: 1;
+}
+
+.restRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.scoreBarWrapper {
+  display: none;
+  width: 6rem;
+  height: 0.25rem;
+  background: #27272a;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) { .scoreBarWrapper { display: block; } }
+
+.scoreBarFill {
+  height: 100%;
+  background: rgb(0 161 222 / 0.6);
+  border-radius: 9999px;
+}
+
+.restScore {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: white;
+  font-variant-numeric: tabular-nums;
+}

@@ -1,57 +1,379 @@
-.mapPanel {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding-bottom: 100px; /* Leave room for HUD */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 3.5rem);
 }
 
-.radarCard {
-    background: var(--surface);
-    border: 1px solid var(--glass-border);
-    border-radius: 1.5rem;
-    padding: 1.5rem;
-    position: relative;
-    overflow: hidden;
+/* ── Map (top half) ── */
+.mapContainer {
+  position: relative;
+  flex-shrink: 0;
+  height: 52%;
 }
 
-/* Discovery Pulse Animation for POIs */
-.poiItem {
-    background: rgba(255, 255, 255, 0.03);
-    border-left: 4px solid var(--cta-blue);
-    margin: 0.75rem 0;
-    padding: 1rem;
-    border-radius: 0 1rem 1rem 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    animation: slideIn 0.4s ease-out;
+.mapEl {
+  width: 100%;
+  height: 100%;
 }
 
-.unlocking {
-    border-left-color: var(--cta-yellow);
-    animation: pulseUnlock 1.5s infinite;
+/* ── Floating overlays ── */
+.overlayLeft {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-@keyframes pulseUnlock {
-    0% { box-shadow: 0 0 0 0 rgba(249, 227, 0, 0.4); }
-    70% { box-shadow: 0 0 0 15px rgba(249, 227, 0, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(249, 227, 0, 0); }
+.geoPill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  backdrop-filter: blur(12px);
+  border: 1px solid;
 }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
+.geoPillInside {
+  background: rgb(0 155 58 / 0.15);
+  color: #4ade80;
+  border-color: rgb(0 155 58 / 0.3);
+}
+
+.geoPillOutside {
+  background: rgb(198 12 48 / 0.15);
+  color: #f87171;
+  border-color: rgb(198 12 48 / 0.3);
+}
+
+.geoPillUnknown {
+  background: rgb(39 39 42 / 0.8);
+  color: #a1a1aa;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.geoDot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.geoDotInside {
+  background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+}
+
+.geoDotOutside { background: #f87171; }
+.geoDotUnknown { background: #71717a; }
+
+.gpsErrPill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  background: rgb(234 179 8 / 0.1);
+  color: #facc15;
+  border: 1px solid rgb(234 179 8 / 0.2);
+  backdrop-filter: blur(12px);
+}
+
+.leaveBtn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: rgb(9 9 11 / 0.9);
+  color: #d4d4d8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  transition: all 0.15s;
+}
+
+.leaveBtn:hover { border-color: rgba(255, 255, 255, 0.2); }
+
+/* ── Station panel (bottom half) ── */
+.panel {
+  flex: 1;
+  overflow-y: auto;
+  background: #09090b;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.feedback {
+  margin: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  border: 1px solid;
+}
+
+.feedbackErr {
+  background: rgb(239 68 68 / 0.1);
+  color: #f87171;
+  border-color: rgb(239 68 68 / 0.2);
+}
+
+.feedbackOk {
+  background: rgb(0 161 222 / 0.1);
+  color: var(--cta-blue);
+  border-color: rgb(0 161 222 / 0.2);
+}
+
+/* ── Panel header ── */
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.panelHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trainIcon { color: var(--cta-blue); }
+
+.panelTitle {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: white;
+}
+
+.panelCount {
+  margin-left: 0.375rem;
+  color: #52525b;
+  font-weight: 400;
+  font-size: 0.75rem;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.filterBtnActive {
+  background: rgb(0 161 222 / 0.15);
+  color: var(--cta-blue);
+  border: 1px solid rgb(0 161 222 / 0.3);
+}
+
+.filterBtnInactive {
+  color: #71717a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filterBtnInactive:hover {
+  color: #d4d4d8;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Station list ── */
+.stationList > * + * {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.stationRow {
+  padding: 0.75rem 1rem;
+  transition: background-color 0.15s;
+}
+
+.stationRowActive { background: rgb(0 155 58 / 0.05); }
+
+.stationMain {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.stationDot {
+  margin-top: 0.125rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.stationDotActive {
+  background: var(--cta-green);
+  box-shadow: 0 0 8px var(--cta-green);
+}
+
+.stationDotNear { background: var(--cta-blue); }
+.stationDotFar  { background: #3f3f46; }
+
+.stationInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.stationNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.stationName {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: white;
+}
+
+.badgeActive {
+  font-size: 0.625rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  background: rgb(0 155 58 / 0.15);
+  color: #4ade80;
+  border: 1px solid rgb(0 155 58 / 0.25);
+  font-weight: 500;
+}
+
+.badgeVisited {
+  font-size: 0.625rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  background: #27272a;
+  color: #a1a1aa;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 500;
+}
+
+.stationDist {
+  font-size: 0.75rem;
+  color: #52525b;
+  margin-top: 0.125rem;
+}
+
+.stationActions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
 }
 
 .checkInBtn {
-    background: linear-gradient(135deg, var(--cta-blue), var(--cta-purple));
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 1rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 161, 222, 0.3);
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.checkInBtnEnabled {
+  background: var(--cta-blue);
+  color: white;
+}
+
+.checkInBtnEnabled:hover { background: rgb(0 161 222 / 0.9); }
+
+.checkInBtnDisabled {
+  background: #27272a;
+  color: #52525b;
+  cursor: not-allowed;
+}
+
+.expandBtn {
+  padding: 0.25rem;
+  border-radius: 0.375rem;
+  color: #71717a;
+  transition: all 0.15s;
+}
+
+.expandBtn:hover {
+  color: #d4d4d8;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ── POI list ── */
+.poiList {
+  margin-top: 0.75rem;
+  margin-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.poiNone {
+  font-size: 0.75rem;
+  color: #52525b;
+}
+
+.poiRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.375rem;
+  transition: background-color 0.15s;
+}
+
+.poiRow:hover { background: rgba(255, 255, 255, 0.03); }
+
+.poiLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.poiIconVisited { color: var(--cta-green); flex-shrink: 0; }
+.poiIconUnvisited { color: #52525b; flex-shrink: 0; }
+
+.poiName {
+  font-size: 0.75rem;
+  color: #d4d4d8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.poiCheck {
+  font-size: 0.625rem;
+  color: var(--cta-green);
+  flex-shrink: 0;
+}
+
+.poiBtn {
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.poiBtnActive {
+  color: var(--cta-blue);
+}
+
+.poiBtnActive:hover { background: rgb(0 161 222 / 0.1); }
+
+.poiBtnDone {
+  color: #3f3f46;
+  cursor: default;
 }

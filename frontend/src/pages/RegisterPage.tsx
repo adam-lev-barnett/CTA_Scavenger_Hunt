@@ -2,6 +2,11 @@ import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { api } from '../services/api';
+import styles from './RegisterPage.module.css';
+
+const LINE_COLORS: Record<string, string> = {
+  red: '#c60c30', blue: '#00a1de', green: '#009b3a', purple: '#522398', orange: '#f9461c',
+};
 
 export default function RegisterPage() {
   const navigate       = useNavigate();
@@ -28,71 +33,67 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex">
+    <div className={styles.page}>
 
       {/* Left panel */}
-      <div className="hidden lg:flex flex-1 flex-col justify-between p-12 bg-zinc-900 border-r border-white/[0.06] relative overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-cta-blue/5 blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-40 -right-20 w-[400px] h-[400px] rounded-full bg-cta-purple/5 blur-3xl pointer-events-none" />
+      <div className={styles.leftPanel}>
+        <div className={styles.blobTop} />
+        <div className={styles.blobBottom} />
 
-        <div className="relative flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-md bg-cta-blue flex items-center justify-center">🚇</div>
-          <span className="font-display font-bold text-white tracking-tight">Chica<span className="text-cta-blue">-Go</span></span>
+        <div className={styles.logoRow}>
+          <div className={styles.logoBox}>🚇</div>
+          <span className={styles.logoName}>Chica<span className={styles.logoAccent}>-Go</span></span>
         </div>
 
-        <div className="relative space-y-4">
-          <p className="text-4xl font-display font-bold text-white leading-tight">
+        <div className={styles.taglineSection}>
+          <p className={styles.tagline}>
             Join thousands of<br />Chicago explorers.
           </p>
-          <p className="text-zinc-400 text-base max-w-sm leading-relaxed">
+          <p className={styles.taglineBody}>
             Earn points at every L stop. Discover the stories behind the city's most iconic neighborhoods.
           </p>
         </div>
 
-        <div className="relative flex items-center gap-3">
+        <div className={styles.ctaLines}>
           {['red','blue','green','purple','orange'].map(line => (
-            <div key={line} className={`h-1 flex-1 rounded-full bg-cta-${line} opacity-70`} />
+            <div key={line} className={styles.ctaLine} style={{ backgroundColor: LINE_COLORS[line] }} />
           ))}
         </div>
       </div>
 
       {/* Right panel — form */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <form onSubmit={onSubmit} className="w-full max-w-sm space-y-5 animate-fade-up">
+      <div className={styles.rightPanel}>
+        <form onSubmit={onSubmit} className={styles.form}>
 
-          <div className="space-y-1">
-            <h1 className="font-display text-2xl font-bold text-white tracking-tight">Create account</h1>
-            <p className="text-sm text-zinc-500">Start exploring Chicago today</p>
+          <div className={styles.formHeader}>
+            <h1 className={styles.formTitle}>Create account</h1>
+            <p className={styles.formSubtitle}>Start exploring Chicago today</p>
           </div>
 
-          <div className="space-y-3">
+          <div className={styles.fieldset}>
             <div>
-              <label className="label">Username</label>
-              <input className="input" type="text" placeholder="ChicagoExplorer" value={username} onChange={e => setUsername(e.target.value)} required autoComplete="username" />
+              <label className={styles.label}>Username</label>
+              <input className={styles.input} type="text" placeholder="ChicagoExplorer" value={username} onChange={e => setUsername(e.target.value)} required autoComplete="username" />
             </div>
             <div>
-              <label className="label">Email</label>
-              <input className="input" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" />
+              <label className={styles.label}>Email</label>
+              <input className={styles.input} type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" />
             </div>
             <div>
-              <label className="label">Password</label>
-              <input className="input" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="new-password" />
+              <label className={styles.label}>Password</label>
+              <input className={styles.input} type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="new-password" />
             </div>
           </div>
 
-          {error && (
-            <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2.5">
-              {error}
-            </p>
-          )}
+          {error && <p className={styles.errorMsg}>{error}</p>}
 
-          <button type="submit" disabled={loading} className="btn btn-primary w-full justify-center py-2.5">
+          <button type="submit" disabled={loading} className={styles.submitBtn}>
             {loading ? 'Creating account…' : 'Create Account'}
           </button>
 
-          <p className="text-center text-sm text-zinc-600">
+          <p className={styles.footerText}>
             Already have an account?{' '}
-            <Link to="/login" className="text-cta-blue hover:underline">Sign in</Link>
+            <Link to="/login" className={styles.footerLink}>Sign in</Link>
           </p>
         </form>
       </div>

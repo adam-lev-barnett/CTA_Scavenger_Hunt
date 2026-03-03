@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { useAuth } from '../hooks/useAuth';
 import { api } from '../services/api';
 import type { CheckInResponse, PointOfInterest, Station } from '../types';
+import styles from './mappage.module.css';
 
 const CENTER: [number, number] = [41.883, -87.629];
 const RADIUS_M = 6000;
@@ -106,9 +107,7 @@ export default function MapPage() {
     L.marker([pos.lat, pos.lng], {
       icon: L.divIcon({
         className: '',
-        html: `<div class="relative flex items-center justify-center">
-          <div style="width:12px;height:12px;border-radius:50%;background:#00a1de;border:2px solid white;box-shadow:0 0 0 3px rgba(0,161,222,.25)"></div>
-        </div>`,
+        html: `<div style="width:12px;height:12px;border-radius:50%;background:#00a1de;border:2px solid white;box-shadow:0 0 0 3px rgba(0,161,222,.25)"></div>`,
         iconSize: [12, 12], iconAnchor: [6, 6],
       }),
     }).bindPopup('<b>You are here</b>').addTo(userLyr.current);
@@ -217,33 +216,32 @@ export default function MapPage() {
   const geoState = !pos ? 'unknown' : nearest?.inRange ? 'inside' : 'outside';
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem)]">
+    <div className={styles.container}>
 
       {/* Map — top half */}
-      <div className="relative flex-shrink-0" style={{ height: '52%' }}>
-        <div id="live-map" className="w-full h-full" />
+      <div className={styles.mapContainer} style={{ height: '52%' }}>
+        <div id="live-map" className={styles.mapEl} />
 
         {/* Floating overlays */}
-        <div className="absolute top-3 left-3 z-[500] flex flex-col gap-2">
+        <div className={styles.overlayLeft}>
           {/* Geofence pill */}
-          <div className={[
-            'flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-md border',
-            geoState === 'inside'  ? 'bg-cta-green/15 text-green-400 border-cta-green/30' :
-            geoState === 'outside' ? 'bg-cta-red/15 text-red-400 border-cta-red/30' :
-                                     'bg-zinc-800/80 text-zinc-400 border-white/10',
-          ].join(' ')}>
-            <span className={[
-              'w-1.5 h-1.5 rounded-full',
-              geoState === 'inside' ? 'bg-green-400 shadow-[0_0_6px_#4ade80]' :
-              geoState === 'outside' ? 'bg-red-400' : 'bg-zinc-500',
-            ].join(' ')} />
+          <div className={`${styles.geoPill} ${
+            geoState === 'inside'  ? styles.geoPillInside  :
+            geoState === 'outside' ? styles.geoPillOutside :
+                                     styles.geoPillUnknown
+          }`}>
+            <span className={`${styles.geoDot} ${
+              geoState === 'inside'  ? styles.geoDotInside  :
+              geoState === 'outside' ? styles.geoDotOutside :
+                                       styles.geoDotUnknown
+            }`} />
             {!pos ? 'Locating…' :
              nearest ? `${nearest.inRange ? 'In range' : 'Out of range'} · ${fmtDist(nearest.distance)} from ${nearest.station.stationName ?? nearest.station.name ?? 'station'}` :
              'No stations'}
           </div>
 
           {gpsErr && (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 backdrop-blur-md">
+            <div className={styles.gpsErrPill}>
               <Navigation size={11} /> {gpsErr}
             </div>
           )}
@@ -252,7 +250,7 @@ export default function MapPage() {
         {activeStation && (
           <button
             onClick={() => { setActiveStation(null); setExpandedStation(null); setMsg('Left station area.'); }}
-            className="absolute top-3 right-3 z-[500] px-3 py-1.5 rounded-full text-xs font-medium bg-zinc-900/90 text-zinc-300 border border-white/10 hover:border-white/20 backdrop-blur-md transition-all"
+            className={styles.leaveBtn}
           >
             ✕ Leave station
           </button>
@@ -260,36 +258,28 @@ export default function MapPage() {
       </div>
 
       {/* Station panel — bottom half, scrollable */}
-      <div className="flex-1 overflow-y-auto bg-zinc-950 border-t border-white/[0.06]">
+      <div className={styles.panel}>
 
         {/* Feedback */}
         {(err || msg) && (
-          <div className={[
-            'mx-4 mt-4 px-4 py-3 rounded-lg text-sm border',
-            err ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-cta-blue/10 text-cta-blue border-cta-blue/20',
-          ].join(' ')}>
+          <div className={`${styles.feedback} ${err ? styles.feedbackErr : styles.feedbackOk}`}>
             {err ?? msg}
           </div>
         )}
 
         {/* Header row */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.04]">
-          <div className="flex items-center gap-2">
-            <Train size={14} className="text-cta-blue" />
-            <span className="font-display font-semibold text-sm text-white">
+        <div className={styles.panelHeader}>
+          <div className={styles.panelHeaderLeft}>
+            <Train size={14} className={styles.trainIcon} />
+            <span className={styles.panelTitle}>
               Stations
-              <span className="ml-1.5 text-zinc-600 font-normal text-xs">{displayed.length}</span>
+              <span className={styles.panelCount}>{displayed.length}</span>
             </span>
           </div>
           <button
             disabled={!pos}
             onClick={() => setShowClosest(v => !v)}
-            className={[
-              'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all',
-              showClosest
-                ? 'bg-cta-blue/15 text-cta-blue border border-cta-blue/30'
-                : 'text-zinc-500 hover:text-zinc-300 border border-white/10 hover:border-white/20',
-            ].join(' ')}
+            className={`${styles.filterBtn} ${showClosest ? styles.filterBtnActive : styles.filterBtnInactive}`}
           >
             <Filter size={11} />
             {showClosest ? '5 Closest' : 'All'}
@@ -297,7 +287,7 @@ export default function MapPage() {
         </div>
 
         {/* Station list */}
-        <div className="divide-y divide-white/[0.04]">
+        <div className={styles.stationList}>
           {displayed.map(s => {
             const name     = s.stationName ?? s.poiName ?? `Station ${s.id}`;
             const isActive = activeStation === s.id;
@@ -306,38 +296,30 @@ export default function MapPage() {
             const loading  = loadingId === s.id;
 
             return (
-              <div key={s.id} className={[
-                'px-4 py-3 transition-colors',
-                isActive ? 'bg-cta-green/5' : '',
-              ].join(' ')}>
+              <div key={s.id} className={`${styles.stationRow} ${isActive ? styles.stationRowActive : ''}`}>
 
-                <div className="flex items-start gap-3">
+                <div className={styles.stationMain}>
                   {/* Color dot */}
-                  <div className={[
-                    'mt-0.5 w-2 h-2 rounded-full shrink-0',
-                    isActive ? 'bg-cta-green shadow-[0_0_8px_#009b3a]' :
-                    canCheck ? 'bg-cta-blue' : 'bg-zinc-700',
-                  ].join(' ')} />
+                  <div className={`${styles.stationDot} ${
+                    isActive  ? styles.stationDotActive :
+                    canCheck  ? styles.stationDotNear   :
+                                styles.stationDotFar
+                  }`} />
 
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-display font-semibold text-sm text-white">{name}</span>
-                      {isActive && <span className="text-[10px] px-1.5 py-0.5 rounded bg-cta-green/15 text-green-400 border border-cta-green/25 font-medium">Active</span>}
-                      {visited[s.id] && !isActive && <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-white/8 font-medium">Visited</span>}
+                  <div className={styles.stationInfo}>
+                    <div className={styles.stationNameRow}>
+                      <span className={styles.stationName}>{name}</span>
+                      {isActive && <span className={styles.badgeActive}>Active</span>}
+                      {visited[s.id] && !isActive && <span className={styles.badgeVisited}>Visited</span>}
                     </div>
-                    <p className="text-xs text-zinc-600 mt-0.5">{fmtDist(distFrom(s))}</p>
+                    <p className={styles.stationDist}>{fmtDist(distFrom(s))}</p>
                   </div>
 
-                  <div className="flex items-center gap-1.5 shrink-0">
+                  <div className={styles.stationActions}>
                     <button
                       disabled={loading || !canCheck}
                       onClick={() => checkInStation(s)}
-                      className={[
-                        'px-2.5 py-1 rounded-md text-xs font-medium transition-all',
-                        canCheck
-                          ? 'bg-cta-blue text-white hover:bg-cta-blue/90'
-                          : 'bg-zinc-800 text-zinc-600 cursor-not-allowed',
-                      ].join(' ')}
+                      className={`${styles.checkInBtn} ${canCheck ? styles.checkInBtnEnabled : styles.checkInBtnDisabled}`}
                     >
                       {loading ? '…' : canCheck ? 'Check In' : 'Too far'}
                     </button>
@@ -348,7 +330,7 @@ export default function MapPage() {
                           try { await fetchPois(s.id); setExpandedStation(expanded ? null : s.id); }
                           catch (e) { setErr(e instanceof Error ? e.message : 'Failed'); }
                         }}
-                        className="p-1 rounded-md text-zinc-500 hover:text-zinc-300 hover:bg-white/5 transition-all"
+                        className={styles.expandBtn}
                       >
                         {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                       </button>
@@ -358,25 +340,22 @@ export default function MapPage() {
 
                 {/* POI list */}
                 {expanded && unlocked[s.id] && (
-                  <div className="mt-3 ml-5 space-y-1">
+                  <div className={styles.poiList}>
                     {!(nearbyMap[s.id]?.length) ? (
-                      <p className="text-xs text-zinc-600">No nearby spots found.</p>
+                      <p className={styles.poiNone}>No nearby spots found.</p>
                     ) : nearbyMap[s.id].map(poi => {
                       const v = !!visited[poi.id];
                       return (
-                        <div key={poi.id} className="flex items-center justify-between gap-3 py-1.5 px-2.5 rounded-md hover:bg-white/[0.03] transition-colors">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <MapPin size={11} className={v ? 'text-cta-green shrink-0' : 'text-zinc-600 shrink-0'} />
-                            <span className="text-xs text-zinc-300 truncate">{poi.poiName ?? poi.name ?? `POI ${poi.id}`}</span>
-                            {v && <span className="text-[10px] text-cta-green shrink-0">✓</span>}
+                        <div key={poi.id} className={styles.poiRow}>
+                          <div className={styles.poiLeft}>
+                            <MapPin size={11} className={v ? styles.poiIconVisited : styles.poiIconUnvisited} />
+                            <span className={styles.poiName}>{poi.poiName ?? poi.name ?? `POI ${poi.id}`}</span>
+                            {v && <span className={styles.poiCheck}>✓</span>}
                           </div>
                           <button
                             disabled={!!loadingId || v}
                             onClick={() => checkInPoi(s.id, poi)}
-                            className={[
-                              'px-2 py-0.5 rounded text-[11px] font-medium shrink-0 transition-all',
-                              v ? 'text-zinc-700 cursor-default' : 'text-cta-blue hover:bg-cta-blue/10',
-                            ].join(' ')}
+                            className={`${styles.poiBtn} ${v ? styles.poiBtnDone : styles.poiBtnActive}`}
                           >
                             {loadingId === poi.id ? '…' : v ? 'Done' : 'Check In'}
                           </button>

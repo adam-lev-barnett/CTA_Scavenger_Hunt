@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import styles from './ContactPage.module.css';
 
 export default function ContactPage() {
   const [name,      setName]      = useState('');
@@ -13,48 +14,48 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-12 animate-fade-up">
+    <div className={styles.page}>
 
-      <div className="space-y-1 mb-8">
-        <p className="text-xs font-semibold uppercase tracking-widest text-cta-blue">Contact</p>
-        <h1 className="font-display text-2xl font-bold text-white tracking-tight">Get in touch</h1>
-        <p className="text-sm text-zinc-500">Bug report, feature idea, or just want to say hi?</p>
+      <div className={styles.pageHeader}>
+        <p className={styles.eyebrow}>Contact</p>
+        <h1 className={styles.pageTitle}>Get in touch</h1>
+        <p className={styles.pageSubtitle}>Bug report, feature idea, or just want to say hi?</p>
       </div>
 
       {submitted ? (
-        <div className="card px-6 py-10 text-center space-y-3">
-          <p className="text-3xl">✓</p>
-          <h3 className="font-display font-semibold text-white">Message sent</h3>
-          <p className="text-sm text-zinc-500">We'll get back to you as soon as possible.</p>
+        <div className={styles.successCard}>
+          <p className={styles.successCheck}>✓</p>
+          <h3 className={styles.successTitle}>Message sent</h3>
+          <p className={styles.successBody}>We'll get back to you as soon as possible.</p>
           <button
-            className="btn btn-ghost mt-2"
+            className={styles.resetBtn}
             onClick={() => { setSubmitted(false); setName(''); setEmail(''); setSubject(''); setMessage(''); }}
           >
             Send another
           </button>
         </div>
       ) : (
-        <form onSubmit={onSubmit} className="card px-6 py-6 space-y-4">
-          <div className="grid grid-cols-2 gap-3">
+        <form onSubmit={onSubmit} className={styles.contactForm}>
+          <div className={styles.twoCol}>
             <div>
-              <label className="label">Name</label>
-              <input className="input" type="text" placeholder="Jane Smith" value={name} onChange={e => setName(e.target.value)} required />
+              <label className={styles.label}>Name</label>
+              <input className={styles.input} type="text" placeholder="Jane Smith" value={name} onChange={e => setName(e.target.value)} required />
             </div>
             <div>
-              <label className="label">Email</label>
-              <input className="input" type="email" placeholder="jane@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
+              <label className={styles.label}>Email</label>
+              <input className={styles.input} type="email" placeholder="jane@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
             </div>
           </div>
 
           <div>
-            <label className="label">Subject</label>
-            <input className="input" type="text" placeholder="Bug / Feature / Other" value={subject} onChange={e => setSubject(e.target.value)} required />
+            <label className={styles.label}>Subject</label>
+            <input className={styles.input} type="text" placeholder="Bug / Feature / Other" value={subject} onChange={e => setSubject(e.target.value)} required />
           </div>
 
           <div>
-            <label className="label">Message</label>
+            <label className={styles.label}>Message</label>
             <textarea
-              className="input resize-none"
+              className={styles.textarea}
               rows={5}
               placeholder="What's on your mind?"
               value={message}
@@ -63,21 +64,21 @@ export default function ContactPage() {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-full justify-center py-2.5">
+          <button type="submit" className={styles.submitBtn}>
             Send Message
           </button>
         </form>
       )}
 
-      <div className="grid grid-cols-2 gap-3 mt-4">
+      <div className={styles.infoGrid}>
         {[
           { emoji: '🐛', title: 'Found a bug?',    body: 'Describe what happened and we\'ll fix it fast.' },
           { emoji: '📍', title: 'Suggest a spot',  body: 'Know a hidden Chicago gem? We\'ll add it.' },
         ].map(c => (
-          <div key={c.title} className="card px-4 py-4 space-y-1">
-            <span className="text-xl">{c.emoji}</span>
-            <p className="font-display font-semibold text-sm text-white">{c.title}</p>
-            <p className="text-xs text-zinc-500">{c.body}</p>
+          <div key={c.title} className={styles.infoCard}>
+            <span className={styles.infoEmoji}>{c.emoji}</span>
+            <p className={styles.infoTitle}>{c.title}</p>
+            <p className={styles.infoBody}>{c.body}</p>
           </div>
         ))}
       </div>

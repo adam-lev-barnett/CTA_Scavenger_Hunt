@@ -9,10 +9,11 @@ import MapPage from './pages/MapPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import StampBookPage from './pages/StampBookPage';
+import styles from './App.module.css';
 
 function ProtectedLayout() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className={styles.layout}>
       <NavBar />
       <Routes>
         <Route path="/map"         element={<MapPage />} />
