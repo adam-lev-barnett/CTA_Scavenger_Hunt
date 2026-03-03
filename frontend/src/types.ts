@@ -44,8 +44,7 @@ export interface StampBookEntry {
   id: number;
   pointOfInterest?: {
     id: number;
-    name?: string;
-    pointName?: string;
+    poiName?: string;
   };
   visited?: boolean;
   visitedAt?: string | null;

@@ -78,7 +78,7 @@ export default function StampBookPage() {
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
           {entries.map((entry, i) => {
             const id        = entry.pointOfInterest?.id ?? entry.id;
-            const name      = entry.pointOfInterest?.name ?? entry.pointOfInterest?.pointName ?? `Location ${id}`;
+            const name      = entry.pointOfInterest?.poiName ?? `Location ${id}`;
             const isVisited = !!entry.visited;
             const emoji     = EMOJIS[id % EMOJIS.length];
             const date      = fmtDate(entry.visitedAt);

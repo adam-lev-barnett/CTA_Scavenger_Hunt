@@ -90,7 +90,7 @@ public class StampBookService {
 
         return new StampBookEntryResponse(
                 saved.getId(),
-                poi.getId(),
+                entry.getPointOfInterest().getPoiName(),
                 stampBook.getId()
         );
     }
