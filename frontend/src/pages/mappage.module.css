@@ -1,14 +1,15 @@
 .container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: calc(100vh - 3.5rem);
+  padding: 4rem;
 }
 
-/* ── Map (top half) ── */
+/* ── Map (left half) ── */
 .mapContainer {
   position: relative;
-  flex-shrink: 0;
-  height: 52%;
+  flex: 1;
+  height: 100%;
 }
 
 .mapEl {
@@ -103,12 +104,13 @@
 
 .leaveBtn:hover { border-color: rgba(255, 255, 255, 0.2); }
 
-/* ── Station panel (bottom half) ── */
+/* ── Station panel (right half) ── */
 .panel {
-  flex: 1;
+  width: 380px;
+  flex-shrink: 0;
   overflow-y: auto;
   background: #09090b;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .feedback {
@@ -192,6 +194,8 @@
 /* ── Station list ── */
 .stationList > * + * {
   border-top: 1px solid rgba(255, 255, 255, 0.04);
+  text-align: center;
+  justify-content: center;
 }
 
 .stationRow {

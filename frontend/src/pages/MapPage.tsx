@@ -219,7 +219,7 @@ export default function MapPage() {
     <div className={styles.container}>
 
       {/* Map — top half */}
-      <div className={styles.mapContainer} style={{ height: '52%' }}>
+      <div className={styles.mapContainer}>
         <div id="live-map" className={styles.mapEl} />
 
         {/* Floating overlays */}
@@ -317,11 +317,11 @@ export default function MapPage() {
 
                   <div className={styles.stationActions}>
                     <button
-                      disabled={loading || !canCheck}
+                      disabled={loading || !canCheck || isActive}
                       onClick={() => checkInStation(s)}
-                      className={`${styles.checkInBtn} ${canCheck ? styles.checkInBtnEnabled : styles.checkInBtnDisabled}`}
+                      className={`${styles.checkInBtn} ${!isActive && canCheck ? styles.checkInBtnEnabled : styles.checkInBtnDisabled}`}
                     >
-                      {loading ? '…' : canCheck ? 'Check In' : 'Too far'}
+                      {loading ? '…' : isActive ? 'Checked In' : canCheck ? 'Check In' : 'Too far'}
                     </button>
 
                     {unlocked[s.id] && isActive && (
