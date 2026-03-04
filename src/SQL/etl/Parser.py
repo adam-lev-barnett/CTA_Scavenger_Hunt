@@ -1,8 +1,17 @@
 import os
 import json
+import math
 import numpy as np
 
-def Parser(filename, point=10):
+def haversine(lat1, lon1, lat2, lon2):
+    """Returns distance in kilometers between two lat/lon points."""
+    R = 6371
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+    a = math.sin(dlat/2)**2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon/2)**2
+    return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+def Parser(filename, point=10, center=None, radius_km=None):
     """
     outputs a list of dict
     """
@@ -24,6 +33,9 @@ def Parser(filename, point=10):
 
         if name and geom_type == "Point" and isinstance(coordinates, list) and len(coordinates) == 2:
             lon, lat = coordinates
+            if center and radius_km:
+                if haversine(center[0], center[1], float(lat), float(lon)) > radius_km:
+                    continue
             results.append({
                 "name": name,
                 "latitude": float(lat),
@@ -46,12 +58,12 @@ def get_nearest_station(poi:dict, stations:list) -> dict:
     _stations = list(sorted(_stations, key=lambda x: x[0]))
     return _stations[0][1] # lowest _dst, name
 
-def build_poi_list(poi_filepath, stations_filepath) -> tuple:
+def build_poi_list(poi_filepath, stations_filepath, center=None, radius_km=None) -> tuple:
     """
     return a list of dicts from both datasets
     """
     stations = Parser(stations_filepath)
-    _pois = Parser(poi_filepath, 5)
+    _pois = Parser(poi_filepath, 5, center=center, radius_km=radius_km)
     pois = []
     for _poi in _pois:
         pois.append(
